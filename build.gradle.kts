@@ -11,6 +11,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://jitpack.io")
     google()
 }
 
@@ -29,6 +30,10 @@ dependencies {
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.hocon)
     implementation(libs.kotlin.logging)
+
+    implementation(compose.material3)
+    implementation(compose.materialIconsExtended)
+    implementation(libs.compose.previewer)
 }
 
 kotlin {

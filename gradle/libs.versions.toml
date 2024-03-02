@@ -26,10 +26,12 @@ kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutin
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
+# UI
+compose-previewer = { module = "com.github.alexfacciorusso:compose-previewer", version = "main-SNAPSHOT" }
+
 # Database
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
-
 
 # Config
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
