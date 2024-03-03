@@ -26,7 +26,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.exposed.core)
+    runtimeOnly(libs.exposed.jdbc)
     implementation(libs.exposed.kotlin.datetime)
+    runtimeOnly(libs.h2)
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.hocon)
     implementation(libs.kotlin.logging)
@@ -36,6 +38,9 @@ dependencies {
     implementation(libs.compose.previewer)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenModel)
+
+    implementation(libs.diglolCrypto.kdf)
+    implementation(libs.diglolCrypto.hash)
 }
 
 kotlin {

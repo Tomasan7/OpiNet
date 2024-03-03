@@ -11,6 +11,7 @@ voyager = "1.1.0-alpha03"
 
 # Database
 exposed = "0.47.0"
+h2 = "2.2.224"
 
 # Config
 hoplite = "2.8.0.RC3"
@@ -19,6 +20,9 @@ hoplite = "2.8.0.RC3"
 slf4j = "2.0.12"
 logback = "1.5.0"
 kotlin-logging = "6.0.3"
+
+# Crypto
+diglol-crypto = "0.2.0"
 
 [libraries]
 # Kotlin
@@ -34,7 +38,9 @@ voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", vers
 
 # Database
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
 
 # Config
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
@@ -44,6 +50,10 @@ hoplite-hocon = { module = "com.sksamuel.hoplite:hoplite-hocon", version.ref = "
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+
+# Crypto
+diglolCrypto-kdf = { module = "com.diglol.crypto:kdf", version.ref = "diglol-crypto" }
+diglolCrypto-hash = { module = "com.diglol.crypto:hash", version.ref = "diglol-crypto" }
 
 [bundles]
 
