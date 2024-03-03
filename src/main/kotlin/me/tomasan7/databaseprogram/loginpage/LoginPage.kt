@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.alexfacciorusso.previewer.PreviewTheme
 import me.tomasan7.databaseprogram.registerpage.RegisterPage
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
-import me.tomasan7.databaseprogram.ui.PasswordTextField
-import me.tomasan7.databaseprogram.ui.VerticalSpacer
+import me.tomasan7.databaseprogram.ui.component.PasswordTextField
+import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
 
 @Composable
 fun LoginPage(modifier: Modifier = Modifier)

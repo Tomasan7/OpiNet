@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alexfacciorusso.previewer.PreviewTheme
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
-import me.tomasan7.databaseprogram.ui.PasswordTextField
-import me.tomasan7.databaseprogram.ui.VerticalSpacer
+import me.tomasan7.databaseprogram.ui.component.PasswordTextField
+import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
 
 @Composable
 fun RegisterPage(modifier: Modifier = Modifier)
