@@ -6,7 +6,7 @@ kotlinx-datetime = "0.5.0"
 kotlinx-collections-immutable = "0.3.7"
 
 # UI
-compose = "1.5.12"
+compose = "1.6.0"
 
 # Database
 exposed = "0.47.0"
