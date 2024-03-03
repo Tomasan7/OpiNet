@@ -3,10 +3,11 @@ package me.tomasan7.databaseprogram.loginpage
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import cafe.adriel.voyager.core.model.ScreenModel
 
-class LoginPageViewModel
+class LoginScreenModel : ScreenModel
 {
-    var uiState by mutableStateOf(LoginPageState())
+    var uiState by mutableStateOf(LoginScreenState())
         private set
 
     fun setUsername(username: String) = changeUiState(username = username.removeWhitespace())
@@ -15,10 +16,10 @@ class LoginPageViewModel
 
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
 
-    fun register()
+    fun login()
     {
         // TODO: Implement
-        println("Registered")
+        println("Logged In")
     }
 
     private fun changeUiState(

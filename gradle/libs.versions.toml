@@ -7,6 +7,7 @@ kotlinx-collections-immutable = "0.3.7"
 
 # UI
 compose = "1.6.0"
+voyager = "1.1.0-alpha03"
 
 # Database
 exposed = "0.47.0"
@@ -28,6 +29,8 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 
 # UI
 compose-previewer = { module = "com.github.alexfacciorusso:compose-previewer", version = "main-SNAPSHOT" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 
 # Database
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }

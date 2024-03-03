@@ -1,6 +1,6 @@
 package me.tomasan7.databaseprogram.loginpage
 
-data class LoginPageState(
+data class LoginScreenState(
     val username: String = "",
     val firstName: String = "",
     val lastName: String = "",

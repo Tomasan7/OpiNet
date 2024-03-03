@@ -34,6 +34,8 @@ dependencies {
     implementation(compose.material3)
     implementation(compose.materialIconsExtended)
     implementation(libs.compose.previewer)
+    implementation(libs.voyager.navigator)
+    implementation(libs.voyager.screenModel)
 }
 
 kotlin {

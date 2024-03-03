@@ -1,6 +1,6 @@
-package me.tomasan7.databaseprogram.registerpage
+package me.tomasan7.databaseprogram.registerscreen
 
-data class RegisterPageState(
+data class RegisterScreenState(
     val username: String = "",
     val firstName: String = "",
     val lastName: String = "",

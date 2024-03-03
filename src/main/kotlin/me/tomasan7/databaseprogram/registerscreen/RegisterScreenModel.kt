@@ -1,12 +1,16 @@
-package me.tomasan7.databaseprogram.registerpage
+package me.tomasan7.databaseprogram.registerscreen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import cafe.adriel.voyager.core.model.ScreenModel
 
-class RegisterPageViewModel
+class RegisterScreenModel(
+    username: String = "",
+    password: String = "",
+) : ScreenModel
 {
-    var uiState by mutableStateOf(RegisterPageState())
+    var uiState by mutableStateOf(RegisterScreenState(username = username, password = password))
         private set
 
     fun setUsername(username: String) = changeUiState(username = username.removeWhitespace())
@@ -17,7 +21,7 @@ class RegisterPageViewModel
 
     fun setPassword(password: String) = changeUiState(password = password.removeWhitespace())
 
-    fun setConfirmingPassword(confirmingPassword: String) = changeUiState(password = confirmingPassword.removeWhitespace())
+    fun setConfirmingPassword(confirmingPassword: String) = changeUiState(confirmingPassword = confirmingPassword.removeWhitespace())
 
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
 
