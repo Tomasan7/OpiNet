@@ -13,7 +13,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
 import me.tomasan7.databaseprogram.getDatabaseProgram
-import me.tomasan7.databaseprogram.loginpage.LoginScreen
+import me.tomasan7.databaseprogram.loginscreen.LoginScreen
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.PasswordTextField
 import me.tomasan7.databaseprogram.ui.component.VerticalSpacer

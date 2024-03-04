@@ -1,4 +1,4 @@
-package me.tomasan7.databaseprogram.loginpage
+package me.tomasan7.databaseprogram.loginscreen
 
 data class LoginScreenState(
     val username: String = "",

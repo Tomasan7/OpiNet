@@ -1,4 +1,4 @@
-package me.tomasan7.databaseprogram.loginpage
+package me.tomasan7.databaseprogram.loginscreen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

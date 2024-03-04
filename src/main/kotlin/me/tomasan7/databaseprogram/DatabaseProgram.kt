@@ -14,12 +14,11 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import ch.qos.logback.classic.Level
-import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.config.ConfigProvider
 import me.tomasan7.databaseprogram.config.FileConfigProvider
-import me.tomasan7.databaseprogram.loginpage.LoginScreen
+import me.tomasan7.databaseprogram.loginscreen.LoginScreen
 import me.tomasan7.databaseprogram.ui.theme.AppTheme
 import me.tomasan7.databaseprogram.user.DatabaseUserService
 import me.tomasan7.databaseprogram.user.UserService
