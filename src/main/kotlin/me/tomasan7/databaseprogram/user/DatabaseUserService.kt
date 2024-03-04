@@ -1,6 +1,8 @@
 package me.tomasan7.databaseprogram.user
 
 import diglol.crypto.Hash
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -13,8 +15,8 @@ class DatabaseUserService(
     /* TODO: Replace with Argon2 */
     private val sha256 = Hash(Hash.Type.SHA256)
 
-    private fun <T> dbQuery(block: Transaction.() -> T) = transaction(database) {
-        block()
+    private suspend fun <T> dbQuery(statement: Transaction.() -> T) = withContext(Dispatchers.IO) {
+        transaction(database, statement = statement)
     }
 
     suspend fun init()
@@ -24,8 +26,18 @@ class DatabaseUserService(
         }
     }
 
+    private fun ResultRow.toUser() = User(
+        this[UserTable.username],
+        this[UserTable.firstName],
+        this[UserTable.lastName],
+        this[UserTable.id].value
+    )
+
     override suspend fun createUser(user: User, password: String)
     {
+        if (user.id != null)
+            throw IllegalArgumentException("User must not have an id")
+
         val passwordHash = sha256.hash(password.toByteArray(Charsets.UTF_8))
 
         try
@@ -46,14 +58,18 @@ class DatabaseUserService(
         }
     }
 
-    override suspend fun getUser(username: String): User?
-    {
-        return dbQuery {
-            UserTable.selectAll()
-                .where { UserTable.username eq username }
-                .singleOrNull()
-                ?.let { User(it[UserTable.username], it[UserTable.firstName], it[UserTable.lastName]) }
-        }
+    override suspend fun getUserById(id: Int) = dbQuery {
+        UserTable.selectAll()
+            .where { UserTable.id eq id }
+            .singleOrNull()
+            ?.toUser()
+    }
+
+    override suspend fun getUserByUsername(username: String) = dbQuery {
+        UserTable.selectAll()
+            .where { UserTable.username eq username }
+            .singleOrNull()
+            ?.toUser()
     }
 
     override suspend fun loginUser(username: String, password: String): Boolean

@@ -4,7 +4,8 @@ interface UserService
 {
     /** @throws UsernameAlreadyExistsException */
     suspend fun createUser(user: User, password: String)
-    suspend fun getUser(username: String): User?
+    suspend fun getUserById(id: Int): User?
+    suspend fun getUserByUsername(username: String): User?
     suspend fun loginUser(username: String, password: String): Boolean
 }
 

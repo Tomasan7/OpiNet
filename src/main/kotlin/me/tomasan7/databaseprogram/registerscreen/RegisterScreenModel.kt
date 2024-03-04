@@ -4,10 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.launch
+import me.tomasan7.databaseprogram.user.User
+import me.tomasan7.databaseprogram.user.UserService
+import me.tomasan7.databaseprogram.user.UsernameAlreadyExistsException
+
+private val logger = KotlinLogging.logger {}
 
 class RegisterScreenModel(
     username: String = "",
     password: String = "",
+    private val userService: UserService
 ) : ScreenModel
 {
     var uiState by mutableStateOf(RegisterScreenState(username = username, password = password))
@@ -29,8 +38,35 @@ class RegisterScreenModel(
 
     fun register()
     {
-        // TODO: Implement
-        println("Registered")
+        if (uiState.username.isBlank()
+            || uiState.firstName.isBlank()
+            || uiState.lastName.isBlank()
+            || uiState.password.isBlank()
+            || uiState.confirmingPassword.isBlank()
+            || uiState.password != uiState.confirmingPassword)
+            return
+
+        val user = User(
+            username = uiState.username,
+            firstName = uiState.firstName,
+            lastName = uiState.lastName
+        )
+        val password = uiState.password
+
+        screenModelScope.launch {
+            try
+            {
+                userService.createUser(user, password)
+            }
+            catch (e: UsernameAlreadyExistsException)
+            {
+                logger.error { e.message }
+            }
+            catch (e: Exception)
+            {
+                logger.error { e.message }
+            }
+        }
     }
 
     private fun changeUiState(
