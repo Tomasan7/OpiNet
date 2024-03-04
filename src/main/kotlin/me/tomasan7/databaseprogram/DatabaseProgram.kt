@@ -47,9 +47,6 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     {
         val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as ch.qos.logback.classic.Logger
         rootLogger.level = Level.toLevel(config.logLevel, Level.INFO)
-        rootLogger.info("Info message")
-        rootLogger.debug("Debug message")
-        rootLogger.warn("Warn message")
     }
 
     private fun initConfig()
