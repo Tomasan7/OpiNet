@@ -13,6 +13,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import ch.qos.logback.classic.Level
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.config.ConfigProvider
@@ -22,6 +24,8 @@ import me.tomasan7.databaseprogram.ui.theme.AppTheme
 import me.tomasan7.databaseprogram.user.DatabaseUserService
 import me.tomasan7.databaseprogram.user.UserService
 import org.jetbrains.exposed.sql.Database
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class DatabaseProgram : ConfigProvider, ScreenModel
 {
@@ -34,8 +38,18 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     fun init()
     {
         initConfig()
+        initLogging()
         initDatabase()
         initServices()
+    }
+
+    private fun initLogging()
+    {
+        val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as ch.qos.logback.classic.Logger
+        rootLogger.level = Level.toLevel(config.logLevel, Level.INFO)
+        rootLogger.info("Info message")
+        rootLogger.debug("Debug message")
+        rootLogger.warn("Warn message")
     }
 
     private fun initConfig()

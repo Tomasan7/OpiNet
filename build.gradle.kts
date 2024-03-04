@@ -32,6 +32,7 @@ dependencies {
     runtimeOnly(libs.h2)
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.hocon)
+    implementation(libs.logback.classic)
     implementation(libs.kotlin.logging)
 
     implementation(compose.material3)
