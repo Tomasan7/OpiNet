@@ -7,7 +7,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
-import me.tomasan7.databaseprogram.user.User
+import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
 import me.tomasan7.databaseprogram.user.UsernameAlreadyExistsException
 
@@ -46,7 +46,7 @@ class RegisterScreenModel(
             || uiState.password != uiState.confirmingPassword)
             return
 
-        val user = User(
+        val userDto = UserDto(
             username = uiState.username,
             firstName = uiState.firstName,
             lastName = uiState.lastName
@@ -56,7 +56,7 @@ class RegisterScreenModel(
         screenModelScope.launch {
             try
             {
-                userService.createUser(user, password)
+                userService.createUser(userDto, password)
             }
             catch (e: UsernameAlreadyExistsException)
             {

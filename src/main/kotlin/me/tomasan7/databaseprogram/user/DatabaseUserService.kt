@@ -26,16 +26,16 @@ class DatabaseUserService(
         }
     }
 
-    private fun ResultRow.toUser() = User(
+    private fun ResultRow.toUser() = UserDto(
         username = this[UserTable.username],
         firstName = this[UserTable.firstName],
         lastName = this[UserTable.lastName],
         id = this[UserTable.id].value
     )
 
-    override suspend fun createUser(user: User, password: String)
+    override suspend fun createUser(userDto: UserDto, password: String)
     {
-        if (user.id != null)
+        if (userDto.id != null)
             throw IllegalArgumentException("User must not have an id")
 
         val passwordHash = sha256.hash(password.toByteArray(Charsets.UTF_8))
@@ -44,9 +44,9 @@ class DatabaseUserService(
         {
             dbQuery {
                 UserTable.insert {
-                    it[username] = user.username
-                    it[firstName] = user.firstName
-                    it[lastName] = user.lastName
+                    it[username] = userDto.username
+                    it[firstName] = userDto.firstName
+                    it[lastName] = userDto.lastName
                     it[this.password] = passwordHash
                 }
             }
@@ -54,7 +54,7 @@ class DatabaseUserService(
         catch (e: ExposedSQLException)
         {
             if (e.cause is SQLIntegrityConstraintViolationException)
-                throw UsernameAlreadyExistsException(user.username)
+                throw UsernameAlreadyExistsException(userDto.username)
         }
     }
 

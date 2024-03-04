@@ -21,6 +21,7 @@ import me.tomasan7.databaseprogram.config.FileConfigProvider
 import me.tomasan7.databaseprogram.loginscreen.LoginScreen
 import me.tomasan7.databaseprogram.ui.theme.AppTheme
 import me.tomasan7.databaseprogram.user.DatabaseUserService
+import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
@@ -28,6 +29,8 @@ import org.slf4j.LoggerFactory
 
 class DatabaseProgram : ConfigProvider, ScreenModel
 {
+    lateinit var currentUser: UserDto
+
     private lateinit var configProvider: ConfigProvider
     private lateinit var config: Config
     private lateinit var database: Database
