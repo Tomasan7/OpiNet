@@ -1,8 +1,6 @@
 package me.tomasan7.databaseprogram.config
 
-import com.sksamuel.hoplite.ConfigLoaderBuilder
-import com.sksamuel.hoplite.addFileSource
-import com.sksamuel.hoplite.addResourceSource
+import com.sksamuel.hoplite.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.nio.file.Files
@@ -19,6 +17,7 @@ class FileConfigProvider(
 
         return ConfigLoaderBuilder.default()
             .addFileSource(File(path))
+            .addParameterMapper(KebabCaseParamMapper)
             .build()
             .loadConfigOrThrow()
     }
