@@ -27,10 +27,10 @@ class DatabaseUserService(
     }
 
     private fun ResultRow.toUser() = User(
-        this[UserTable.username],
-        this[UserTable.firstName],
-        this[UserTable.lastName],
-        this[UserTable.id].value
+        username = this[UserTable.username],
+        firstName = this[UserTable.firstName],
+        lastName = this[UserTable.lastName],
+        id = this[UserTable.id].value
     )
 
     override suspend fun createUser(user: User, password: String)
