@@ -5,10 +5,9 @@ data class Config(
 )
 {
     data class Database(
-        val host: String,
-        val port: Int,
-        val username: String,
-        val password: String,
-        val database: String
+        val url: String,
+        val driver: String?,
+        val user: String?,
+        val password: String?
     )
 }

@@ -13,7 +13,7 @@ class FileConfigProvider(
     private val path: String
 ) : ConfigProvider
 {
-    override fun loadConfig(): Config
+    override fun getConfig(): Config
     {
         createFileIfNotExists()
 

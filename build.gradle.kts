@@ -23,6 +23,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.core.jvm)
+    implementation(libs.kotlinx.coroutines.swing)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.exposed.core)

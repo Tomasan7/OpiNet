@@ -12,6 +12,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
+import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.registerscreen.RegisterScreen
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.PasswordTextField
@@ -24,9 +25,10 @@ object LoginScreen : Screen
     @Composable
     override fun Content()
     {
-        val model = rememberScreenModel { LoginScreenModel() }
-        val uiState = model.uiState
         val navigator = LocalNavigator.currentOrThrow
+        val databaseProgram = navigator.getDatabaseProgram()
+        val model = rememberScreenModel { LoginScreenModel(databaseProgram.userService) }
+        val uiState = model.uiState
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

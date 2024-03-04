@@ -4,8 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import kotlinx.coroutines.launch
+import me.tomasan7.databaseprogram.user.UserService
 
-class LoginScreenModel : ScreenModel
+class LoginScreenModel(
+    private val userService: UserService
+) : ScreenModel
 {
     var uiState by mutableStateOf(LoginScreenState())
         private set
@@ -18,8 +23,20 @@ class LoginScreenModel : ScreenModel
 
     fun login()
     {
-        // TODO: Implement
-        println("Logged In")
+        screenModelScope.launch {
+            val username = uiState.username
+            val password = uiState.password
+
+            if (username.isBlank() || password.isBlank())
+                return@launch
+
+            val success = userService.loginUser(username, password)
+
+            if (success)
+                println("Logged in")
+            else
+                println("Not logged in")
+        }
     }
 
     private fun changeUiState(

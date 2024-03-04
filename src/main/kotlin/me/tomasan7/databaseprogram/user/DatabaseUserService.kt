@@ -17,7 +17,7 @@ class DatabaseUserService(
         block()
     }
 
-    fun init()
+    suspend fun init()
     {
         dbQuery {
             SchemaUtils.create(UserTable)
