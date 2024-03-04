@@ -22,7 +22,7 @@ class FileConfigProvider(
             .loadConfigOrThrow()
     }
 
-    fun createFileIfNotExists(): Boolean
+    private fun createFileIfNotExists(): Boolean
     {
         val defaultConfigResource = this::class.java.getResource(DEFAULT_CONFIG_RESOURCE_PATH)
             ?: throw IllegalStateException("Default config resource not found")
