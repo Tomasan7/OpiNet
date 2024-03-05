@@ -29,18 +29,18 @@ class DatabasePostService(
         id = this[PostTable.id].value
     )
 
-    override suspend fun createPost(postDto: PostDto)
+    override suspend fun createPost(postDto: PostDto): Int
     {
         if (postDto.id != null)
             throw IllegalArgumentException("Post id must be null when creating a new post")
 
-        dbQuery {
-            PostTable.insert {
+        return dbQuery {
+            PostTable.insertAndGetId {
                 it[title] = postDto.title
                 it[content] = postDto.content
                 it[uploadDate] = postDto.uploadDate
                 it[authorId] = postDto.authorId
-            }
+            }.value
         }
     }
 

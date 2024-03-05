@@ -33,28 +33,30 @@ class DatabaseUserService(
         id = this[UserTable.id].value
     )
 
-    override suspend fun createUser(userDto: UserDto, password: String)
+    override suspend fun createUser(userDto: UserDto, password: String): Int
     {
         if (userDto.id != null)
             throw IllegalArgumentException("User id must be null when creating a new user")
 
         val passwordHash = sha256.hash(password.toByteArray(Charsets.UTF_8))
 
-        try
+        return try
         {
             dbQuery {
-                UserTable.insert {
+                UserTable.insertAndGetId {
                     it[username] = userDto.username
                     it[firstName] = userDto.firstName
                     it[lastName] = userDto.lastName
                     it[this.password] = passwordHash
-                }
+                }.value
             }
         }
         catch (e: ExposedSQLException)
         {
             if (e.cause is SQLIntegrityConstraintViolationException)
                 throw UsernameAlreadyExistsException(userDto.username)
+            else
+                throw e
         }
     }
 
