@@ -4,5 +4,13 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class FeedScreenState(
-    val posts: ImmutableList<Post> = persistentListOf()
+    val posts: ImmutableList<Post> = persistentListOf(),
+    val commentsDialogState: CommentsDialogState = CommentsDialogState()
 )
+{
+    data class CommentsDialogState(
+        val comments: ImmutableList<Comment> = persistentListOf(),
+        val postId: Int? = null,
+        val isOpen: Boolean = false
+    )
+}
