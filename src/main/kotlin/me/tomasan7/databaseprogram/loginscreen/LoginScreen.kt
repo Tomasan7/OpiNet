@@ -3,9 +3,13 @@ package me.tomasan7.databaseprogram.loginscreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -51,6 +55,10 @@ object LoginScreen : Screen
                 value = uiState.username,
                 singleLine = true,
                 onValueChange = { model.setUsername(it) },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    imeAction = ImeAction.Next
+                ),
                 label = { Text("Username") }
             )
             PasswordTextField(
@@ -58,7 +66,15 @@ object LoginScreen : Screen
                 onPasswordChange = { model.setPassword(it) },
                 onChangeVisibilityClick = { model.changePasswordVisibility() },
                 passwordShown = uiState.passwordShown,
-                label = { Text("Password") }
+                label = { Text("Password") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    autoCorrect = false,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { model.login() }
+                )
             )
             Button({ model.login() }) {
                 Text("Login")
