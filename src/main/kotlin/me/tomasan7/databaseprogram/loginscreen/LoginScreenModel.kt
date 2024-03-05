@@ -38,8 +38,8 @@ class LoginScreenModel(
 
             if (success)
             {
-                changeUiState(loginSuccessEvent = true)
                 databaseProgram.currentUser = userService.getUserByUsername(username)!!
+                changeUiState(loginSuccessEvent = true)
             }
         }
     }
