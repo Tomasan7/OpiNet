@@ -6,10 +6,12 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
+import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.user.UserService
 
 class LoginScreenModel(
-    private val userService: UserService
+    private val userService: UserService,
+    private val databaseProgram: DatabaseProgram
 ) : ScreenModel
 {
     var uiState by mutableStateOf(LoginScreenState())
@@ -20,6 +22,8 @@ class LoginScreenModel(
     fun setPassword(password: String) = changeUiState(password = password.removeWhitespace())
 
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
+
+    fun loginSuccessEventConsumed() = changeUiState(loginSuccessEvent = false)
 
     fun login()
     {
@@ -33,9 +37,10 @@ class LoginScreenModel(
             val success = userService.loginUser(username, password)
 
             if (success)
-                println("Logged in")
-            else
-                println("Not logged in")
+            {
+                changeUiState(loginSuccessEvent = true)
+                databaseProgram.currentUser = userService.getUserByUsername(username)!!
+            }
         }
     }
 
@@ -44,7 +49,8 @@ class LoginScreenModel(
         firstName: String? = null,
         lastName: String? = null,
         password: String? = null,
-        passwordShown: Boolean? = null
+        passwordShown: Boolean? = null,
+        loginSuccessEvent: Boolean? = null
     )
     {
         uiState = uiState.copy(
@@ -52,7 +58,8 @@ class LoginScreenModel(
             firstName = firstName ?: uiState.firstName,
             lastName = lastName ?: uiState.lastName,
             password = password ?: uiState.password,
-            passwordShown = passwordShown ?: uiState.passwordShown
+            passwordShown = passwordShown ?: uiState.passwordShown,
+            loginSuccessEvent = loginSuccessEvent ?: uiState.loginSuccessEvent
         )
     }
 

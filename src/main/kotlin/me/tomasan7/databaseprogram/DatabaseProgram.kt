@@ -19,6 +19,8 @@ import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.config.ConfigProvider
 import me.tomasan7.databaseprogram.config.FileConfigProvider
 import me.tomasan7.databaseprogram.loginscreen.LoginScreen
+import me.tomasan7.databaseprogram.post.DatabasePostService
+import me.tomasan7.databaseprogram.post.PostService
 import me.tomasan7.databaseprogram.ui.theme.AppTheme
 import me.tomasan7.databaseprogram.user.DatabaseUserService
 import me.tomasan7.databaseprogram.user.UserDto
@@ -35,6 +37,8 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     private lateinit var config: Config
     private lateinit var database: Database
     lateinit var userService: UserService
+        private set
+    lateinit var postService: PostService
         private set
 
     fun init()
@@ -80,6 +84,7 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     {
         runBlocking {
             userService = DatabaseUserService(database).also { it.init() }
+            postService = DatabasePostService(database).also { it.init() }
         }
     }
 

@@ -25,6 +25,7 @@ class DatabasePostService(
         title = this[PostTable.title],
         content = this[PostTable.content],
         authorId = this[PostTable.authorId].value,
+        uploadDate = this[PostTable.uploadDate],
         id = this[PostTable.id].value
     )
 
@@ -34,6 +35,7 @@ class DatabasePostService(
             PostTable.insert {
                 it[title] = postDto.title
                 it[content] = postDto.content
+                it[uploadDate] = postDto.uploadDate
                 it[authorId] = postDto.authorId
             }
         }
@@ -44,6 +46,12 @@ class DatabasePostService(
             .where { PostTable.id eq id }
             .singleOrNull()
             ?.toPostDto()
+    }
+
+    override suspend fun getAllPosts() = dbQuery {
+        PostTable.selectAll()
+            .map { it.toPostDto() }
+            .toImmutableList()
     }
 
     override suspend fun getPostsByAuthorId(authorId: Int) = dbQuery {
