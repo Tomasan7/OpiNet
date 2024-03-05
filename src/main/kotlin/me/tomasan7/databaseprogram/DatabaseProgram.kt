@@ -16,7 +16,10 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import ch.qos.logback.classic.Level
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import me.tomasan7.databaseprogram.comment.CommentService
+import me.tomasan7.databaseprogram.comment.DatabaseCommentService
 import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.config.ConfigProvider
 import me.tomasan7.databaseprogram.config.FileConfigProvider
@@ -41,6 +44,8 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     lateinit var userService: UserService
         private set
     lateinit var postService: PostService
+        private set
+    lateinit var commentService: CommentService
         private set
 
     fun init()
@@ -85,8 +90,9 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     private fun initServices()
     {
         runBlocking {
-            userService = DatabaseUserService(database).also { it.init() }
-            postService = DatabasePostService(database).also { it.init() }
+            userService = DatabaseUserService(database).also { launch { it.init() } }
+            postService = DatabasePostService(database).also { launch { it.init() } }
+            commentService = DatabaseCommentService(database).also { launch { it.init() } }
         }
     }
 
