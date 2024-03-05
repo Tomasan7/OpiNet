@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
@@ -16,6 +17,7 @@ fun PasswordTextField(
     onPasswordChange: (String) -> Unit,
     onChangeVisibilityClick: () -> Unit,
     passwordShown: Boolean,
+    modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null
 )
 {
@@ -32,6 +34,7 @@ fun PasswordTextField(
                     contentDescription = if (passwordShown) "Hide password" else "Show password"
                 )
             }
-        }
+        },
+        modifier = modifier
     )
 }
