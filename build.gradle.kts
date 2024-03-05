@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.compose.previewer)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenModel)
+    implementation(libs.humanReadable)
 
     implementation(libs.diglolCrypto.kdf)
     implementation(libs.diglolCrypto.hash)
