@@ -36,7 +36,7 @@ class DatabaseUserService(
     override suspend fun createUser(userDto: UserDto, password: String)
     {
         if (userDto.id != null)
-            throw IllegalArgumentException("User must not have an id")
+            throw IllegalArgumentException("User id must be null when creating a new user")
 
         val passwordHash = sha256.hash(password.toByteArray(Charsets.UTF_8))
 
