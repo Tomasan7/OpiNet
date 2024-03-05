@@ -1,9 +1,7 @@
 package me.tomasan7.databaseprogram.feedscreen
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -42,7 +40,9 @@ object FeedScreen : Screen
             model.loadPosts()
         }
 
-        Box {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
