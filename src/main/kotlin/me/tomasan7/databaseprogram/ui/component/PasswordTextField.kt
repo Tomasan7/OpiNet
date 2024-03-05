@@ -1,6 +1,5 @@
 package me.tomasan7.databaseprogram.ui.component
 
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -15,7 +14,6 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import me.tomasan7.databaseprogram.user.UserTable.password
 
 @Composable
 fun PasswordTextField(
