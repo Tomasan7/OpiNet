@@ -1,5 +1,6 @@
 package me.tomasan7.databaseprogram.ui.component
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -8,8 +9,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import me.tomasan7.databaseprogram.user.UserTable.password
 
 @Composable
 fun PasswordTextField(
@@ -18,6 +21,10 @@ fun PasswordTextField(
     onChangeVisibilityClick: () -> Unit,
     passwordShown: Boolean,
     modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Password,
+        autoCorrect = false
+    ),
     label: @Composable (() -> Unit)? = null
 )
 {
