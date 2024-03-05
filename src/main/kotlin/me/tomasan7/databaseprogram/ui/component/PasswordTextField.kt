@@ -1,5 +1,6 @@
 package me.tomasan7.databaseprogram.ui.component
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -25,6 +26,7 @@ fun PasswordTextField(
         keyboardType = KeyboardType.Password,
         autoCorrect = false
     ),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     label: @Composable (() -> Unit)? = null
 )
 {
@@ -34,6 +36,8 @@ fun PasswordTextField(
         visualTransformation = if (passwordShown) VisualTransformation.None else PasswordVisualTransformation(),
         onValueChange = onPasswordChange,
         label = label,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         trailingIcon = {
             IconButton(onClick = { onChangeVisibilityClick() }) {
                 Icon(
