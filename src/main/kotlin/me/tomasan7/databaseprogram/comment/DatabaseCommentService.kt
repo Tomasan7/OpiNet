@@ -23,6 +23,7 @@ class DatabaseCommentService(
 
     private fun ResultRow.toCommentDto() = CommentDto(
         text = this[CommentTable.text],
+        uploadDate = this[CommentTable.uploadDate],
         authorId = this[CommentTable.authorId].value,
         postId = this[CommentTable.postId].value,
         id = this[CommentTable.id].value
@@ -37,6 +38,7 @@ class DatabaseCommentService(
             CommentTable.insertAndGetId {
                 it[text] = comment.text
                 it[authorId] = comment.authorId
+                it[uploadDate] = comment.uploadDate
                 it[postId] = comment.postId
             }.value
         }
