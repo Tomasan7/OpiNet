@@ -13,6 +13,8 @@ human-readable = "1.7.0"
 # Database
 exposed = "0.47.0"
 h2 = "2.2.224"
+mssql-jdbc = "12.6.1.jre11"
+
 
 # Config
 hoplite = "2.8.0.RC3"
@@ -44,6 +46,7 @@ exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "e
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
+mssql-jdbc = { module = "com.microsoft.sqlserver:mssql-jdbc", version.ref = "mssql-jdbc" }
 
 # Config
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
