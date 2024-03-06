@@ -2,26 +2,31 @@ package me.tomasan7.databaseprogram.feedscreen
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alexfacciorusso.previewer.previewLightAndDark
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
+import me.tomasan7.databaseprogram.ui.component.HorizontalSpacer
 import me.tomasan7.databaseprogram.ui.format
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun Post(post: Post)
+fun Post(
+    post: Post,
+    onCommentClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+)
 {
     ElevatedCard {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
+            modifier = modifier
                 .padding(16.dp)
         ) {
             Text(
@@ -47,8 +52,21 @@ fun Post(post: Post)
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            TextButton(
+                onClick = onCommentClick,
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Comment,
+                    contentDescription = null
+                )
+                HorizontalSpacer(6.dp)
+                Text(
+                    text = post.commentCount.toString(),
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
         }
-
     }
 }
 
@@ -72,6 +90,7 @@ fun PostPreview()
         """.trimIndent(),
         author,
         LocalDate(2021, 10, 15),
+        5,
         1
     )
 
