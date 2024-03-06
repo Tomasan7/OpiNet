@@ -7,5 +7,6 @@ data class RegisterScreenState(
     val password: String = "",
     val confirmingPassword: String = "",
     val passwordShown: Boolean = false,
-    val confirmingPasswordShown: Boolean = false
+    val confirmingPasswordShown: Boolean = false,
+    val registrationSuccessEvent: Boolean = false
 )

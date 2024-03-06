@@ -12,6 +12,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
+import me.tomasan7.databaseprogram.feedscreen.FeedScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.loginscreen.LoginScreen
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
@@ -29,8 +30,14 @@ data class RegisterScreen(
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { RegisterScreenModel(username, password, databaseProgram.userService) }
+        val model = rememberScreenModel { RegisterScreenModel(username, password, databaseProgram.userService, databaseProgram) }
         val uiState = model.uiState
+
+        if (uiState.registrationSuccessEvent)
+        {
+            model.registrationSuccessEventConsumed()
+            navigator push FeedScreen
+        }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)

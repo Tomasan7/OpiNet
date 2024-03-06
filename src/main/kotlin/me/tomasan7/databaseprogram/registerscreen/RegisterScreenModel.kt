@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
+import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
 import me.tomasan7.databaseprogram.user.UsernameAlreadyExistsException
@@ -16,7 +17,8 @@ private val logger = KotlinLogging.logger {}
 class RegisterScreenModel(
     username: String = "",
     password: String = "",
-    private val userService: UserService
+    private val userService: UserService,
+    private val databaseProgram: DatabaseProgram
 ) : ScreenModel
 {
     var uiState by mutableStateOf(RegisterScreenState(username = username, password = password))
@@ -35,6 +37,8 @@ class RegisterScreenModel(
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
 
     fun changeConfirmingPasswordVisibility() = changeUiState(confirmingPasswordShown = !uiState.confirmingPasswordShown)
+
+    fun registrationSuccessEventConsumed() = changeUiState(registrationSuccessEvent = false)
 
     fun register()
     {
@@ -56,7 +60,9 @@ class RegisterScreenModel(
         screenModelScope.launch {
             try
             {
-                userService.createUser(userDto, password)
+                val newUserId = userService.createUser(userDto, password)
+                databaseProgram.currentUser = userDto.copy(id = newUserId)
+                changeUiState(registrationSuccessEvent = true)
             }
             catch (e: UsernameAlreadyExistsException)
             {
@@ -76,7 +82,8 @@ class RegisterScreenModel(
         password: String? = null,
         confirmingPassword: String? = null,
         passwordShown: Boolean? = null,
-        confirmingPasswordShown: Boolean? = null
+        confirmingPasswordShown: Boolean? = null,
+        registrationSuccessEvent: Boolean? = null
     )
     {
         uiState = uiState.copy(
@@ -86,7 +93,8 @@ class RegisterScreenModel(
             password = password ?: uiState.password,
             confirmingPassword = confirmingPassword ?: uiState.confirmingPassword,
             passwordShown = passwordShown ?: uiState.passwordShown,
-            confirmingPasswordShown = confirmingPasswordShown ?: uiState.confirmingPasswordShown
+            confirmingPasswordShown = confirmingPasswordShown ?: uiState.confirmingPasswordShown,
+            registrationSuccessEvent = registrationSuccessEvent ?: uiState.registrationSuccessEvent
         )
     }
 
