@@ -26,6 +26,7 @@ import me.tomasan7.databaseprogram.feedscreen.commentdialog.CommentsDialog
 import me.tomasan7.databaseprogram.feedscreen.newpostscreen.NewPostScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
+import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
 
 object FeedScreen : Screen
 {
@@ -86,6 +87,8 @@ object FeedScreen : Screen
                         }
                     )
                 }
+                /* So when user scrolls to the bottom, the FAB doesn't cover any content */
+                VerticalSpacer(60.dp)
             }
             FloatingActionButton(
                 modifier = Modifier.align(Alignment.BottomEnd),
