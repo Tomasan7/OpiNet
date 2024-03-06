@@ -4,7 +4,7 @@ import me.tomasan7.databaseprogram.user.UserTable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 
-object PostTable : IntIdTable()
+object PostTable : IntIdTable("post")
 {
     val title = varchar("title", 100)
     val content = text("content")

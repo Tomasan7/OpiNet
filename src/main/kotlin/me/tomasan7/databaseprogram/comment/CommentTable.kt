@@ -5,7 +5,7 @@ import me.tomasan7.databaseprogram.user.UserTable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 
-object CommentTable : IntIdTable()
+object CommentTable : IntIdTable("comment")
 {
     val text = text("text")
     val uploadDate = date("upload_date")
