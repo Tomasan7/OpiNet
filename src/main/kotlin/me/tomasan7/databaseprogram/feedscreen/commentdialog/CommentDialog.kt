@@ -1,8 +1,6 @@
 package me.tomasan7.databaseprogram.feedscreen.commentdialog
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +9,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.CloudQueue
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -80,6 +77,14 @@ private fun CommentDialogContent(
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
+            Text(
+                text = "Comments",
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
             if (comments.isNotEmpty())
                 comments.forEach { comment ->
                     Comment(

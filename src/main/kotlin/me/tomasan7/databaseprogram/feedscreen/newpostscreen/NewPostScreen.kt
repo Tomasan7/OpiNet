@@ -1,10 +1,7 @@
 package me.tomasan7.databaseprogram.feedscreen.newpostscreen
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -51,6 +48,14 @@ class NewPostScreen : Screen
                     contentDescription = "Back",
                 )
             }
+            Text(
+                text = "Create new post",
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
             OutlinedTextField(
                 value = uiState.title,
                 onValueChange = { model.setTitle(it) },

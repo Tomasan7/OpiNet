@@ -10,6 +10,8 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -68,6 +70,14 @@ object FeedScreen : Screen
                     .align(Alignment.TopCenter)
                     .verticalScroll(rememberScrollState())
             ) {
+                Text(
+                    text = "Posts feed",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
                 uiState.posts.forEach { post ->
                     Post(
                         post = post,
