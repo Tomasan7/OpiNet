@@ -90,9 +90,9 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     private fun initServices()
     {
         runBlocking {
-            userService = DatabaseUserService(database).also { launch { it.init() } }
-            postService = DatabasePostService(database).also { launch { it.init() } }
-            commentService = DatabaseCommentService(database).also { launch { it.init() } }
+            userService = DatabaseUserService(database).also { it.init() }
+            postService = DatabasePostService(database).also { it.init() }
+            commentService = DatabaseCommentService(database).also { it.init() }
         }
     }
 
