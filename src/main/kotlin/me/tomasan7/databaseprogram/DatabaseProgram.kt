@@ -16,7 +16,6 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import ch.qos.logback.classic.Level
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.tomasan7.databaseprogram.comment.CommentService
 import me.tomasan7.databaseprogram.comment.DatabaseCommentService
