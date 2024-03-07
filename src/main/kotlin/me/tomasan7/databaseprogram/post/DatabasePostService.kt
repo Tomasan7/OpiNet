@@ -3,13 +3,16 @@ package me.tomasan7.databaseprogram.post
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.tomasan7.databaseprogram.comment.CommentService
 import me.tomasan7.databaseprogram.comment.CommentTable
 import me.tomasan7.databaseprogram.feedscreen.Post
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabasePostService(
-    private val database: Database
+    private val database: Database,
+    private val commentService: CommentService
 ) : PostService
 {
     private suspend fun <T> dbQuery(statement: Transaction.() -> T) = withContext(Dispatchers.IO) {
@@ -80,5 +83,14 @@ class DatabasePostService(
                 it[uploadDate] = postDto.uploadDate
             }
         } > 0
+    }
+
+    override suspend fun deletePost(id: Int): Boolean
+    {
+        commentService.deleteCommentsForPost(id)
+
+        return dbQuery {
+            PostTable.deleteWhere { PostTable.id eq id } > 0
+        }
     }
 }

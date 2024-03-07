@@ -9,4 +9,5 @@ interface CommentService
     suspend fun getAllCommentsForPostOrderedByUploadDateDesc(postId: Int): ImmutableList<CommentDto>
     suspend fun getAllCommentsForUser(authorId: Int): ImmutableList<CommentDto>
     suspend fun getNumberOfCommentsForPost(postId: Int): Long
+    suspend fun deleteCommentsForPost(postId: Int): Int
 }

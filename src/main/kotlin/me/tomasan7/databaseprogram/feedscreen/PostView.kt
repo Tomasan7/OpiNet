@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ fun Post(
     /** Whether the post is owned by the current user */
     owned: Boolean,
     onCommentClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
     modifier: Modifier = Modifier
 )
@@ -62,6 +64,14 @@ fun Post(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (owned)
+                {
+                    IconButton(onDeleteClick) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete post",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
                     IconButton(onEditClick) {
                         Icon(
                             imageVector = Icons.Default.Edit,
@@ -69,6 +79,7 @@ fun Post(
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
+                }
                 TextButton(onCommentClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.Comment,

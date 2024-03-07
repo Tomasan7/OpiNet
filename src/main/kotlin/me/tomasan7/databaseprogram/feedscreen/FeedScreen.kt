@@ -90,6 +90,7 @@ object FeedScreen : Screen
                         post = post,
                         owned = databaseProgram.currentUser.id == post.author.id,
                         onEditClick = { model.editPost(post) },
+                        onDeleteClick = { model.deletePost(post) },
                         onCommentClick = { model.openComments(post.id) }
                     )
                 }

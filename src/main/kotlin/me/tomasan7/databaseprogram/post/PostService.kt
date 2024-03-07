@@ -9,4 +9,5 @@ interface PostService
     suspend fun getAllPostsOrderedByUploadDateDesc(): ImmutableList<PostDto>
     suspend fun getPostsByAuthorIdOrderedByUploadDateDesc(authorId: Int): ImmutableList<PostDto>
     suspend fun updatePost(postDto: PostDto): Boolean
+    suspend fun deletePost(id: Int): Boolean
 }

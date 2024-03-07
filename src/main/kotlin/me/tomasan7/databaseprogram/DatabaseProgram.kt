@@ -90,8 +90,8 @@ class DatabaseProgram : ConfigProvider, ScreenModel
     {
         runBlocking {
             userService = DatabaseUserService(database).also { it.init() }
-            postService = DatabasePostService(database).also { it.init() }
             commentService = DatabaseCommentService(database).also { it.init() }
+            postService = DatabasePostService(database, commentService).also { it.init() }
         }
     }
 

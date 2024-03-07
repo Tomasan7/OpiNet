@@ -55,6 +55,15 @@ class FeedScreenModel(
         uiState = uiState.copy(editPostEvent = null)
     }
 
+    fun deletePost(post: Post)
+    {
+        screenModelScope.launch {
+            val result = postService.deletePost(post.id)
+            if (result)
+                changeUiState(posts = (uiState.posts - post).toImmutableList())
+        }
+    }
+
     fun openComments(postId: Int)
     {
         screenModelScope.launch {

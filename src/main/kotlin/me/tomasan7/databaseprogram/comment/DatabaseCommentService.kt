@@ -4,6 +4,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabaseCommentService(
@@ -70,5 +71,9 @@ class DatabaseCommentService(
         CommentTable.select(CommentTable.id)
             .where { CommentTable.postId eq postId }
             .count()
+    }
+
+    override suspend fun deleteCommentsForPost(postId: Int) = dbQuery {
+        CommentTable.deleteWhere { CommentTable.postId eq postId }
     }
 }
