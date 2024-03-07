@@ -3,13 +3,18 @@ package me.tomasan7.databaseprogram.feedscreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,20 +38,24 @@ object FeedScreen : Screen
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { FeedScreenModel(
-            databaseProgram.userService,
-            databaseProgram.postService,
-            databaseProgram.commentService,
-            databaseProgram
-        ) }
+        val model = rememberScreenModel {
+            FeedScreenModel(
+                databaseProgram.userService,
+                databaseProgram.postService,
+                databaseProgram.commentService,
+                databaseProgram
+            )
+        }
         val uiState = model.uiState
+        val currentUser = remember { databaseProgram.currentUser.toUser() }
 
         LaunchedEffect(Unit) {
             model.loadPosts()
         }
 
         if (uiState.commentsDialogState.isOpen
-            && uiState.commentsDialogState.postId != null)
+            && uiState.commentsDialogState.postId != null
+        )
             CommentsDialog(
                 comments = uiState.commentsDialogState.comments,
                 onPostComment = { commentText ->
@@ -63,14 +72,17 @@ object FeedScreen : Screen
             navigator push NewPostScreen(editingPost = uiState.editPostEvent)
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
@@ -82,23 +94,53 @@ object FeedScreen : Screen
                         .align(Alignment.CenterHorizontally)
                 )
                 uiState.posts.forEach { post ->
-                    Post(
-                        post = post,
-                        owned = databaseProgram.currentUser.id == post.author.id,
-                        onEditClick = { model.editPost(post) },
-                        onDeleteClick = { model.deletePost(post) },
-                        onCommentClick = { model.openComments(post.id) }
-                    )
+                    key(post.id) {
+                        Post(
+                            post = post,
+                            owned = databaseProgram.currentUser.id == post.author.id,
+                            onEditClick = { model.editPost(post) },
+                            onDeleteClick = { model.deletePost(post) },
+                            onCommentClick = { model.openComments(post.id) }
+                        )
+                    }
                 }
-                /* So when user scrolls to the bottom, the FAB doesn't cover any content */
-                VerticalSpacer(60.dp)
             }
-            FloatingActionButton(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                onClick = { navigator push NewPostScreen() }
+            VerticalSpacer(16.dp)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                User(user = currentUser)
+                FloatingActionButton({ navigator push NewPostScreen() }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun User(user: User)
+{
+    Surface(
+        shape = RoundedCornerShape(100),
+        tonalElevation = 4.dp,
+        shadowElevation = 4.dp,
+        modifier = Modifier
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = "Add",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "${user.firstName} ${user.lastName}"
+            )
         }
     }
 }
