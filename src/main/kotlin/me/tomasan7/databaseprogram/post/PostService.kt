@@ -8,4 +8,5 @@ interface PostService
     suspend fun getPostById(id: Int): PostDto?
     suspend fun getAllPosts(): ImmutableList<PostDto>
     suspend fun getPostsByAuthorId(authorId: Int): ImmutableList<PostDto>
+    suspend fun updatePost(postDto: PostDto): Boolean
 }

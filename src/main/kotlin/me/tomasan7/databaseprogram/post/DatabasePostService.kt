@@ -63,4 +63,18 @@ class DatabasePostService(
             .map { it.toPostDto() }
             .toImmutableList()
     }
+
+    override suspend fun updatePost(postDto: PostDto): Boolean
+    {
+        if (postDto.id == null)
+            throw IllegalArgumentException("Post id must not be null when updating an existing post")
+
+        return dbQuery {
+            PostTable.update({ PostTable.id eq postDto.id }) {
+                it[title] = postDto.title
+                it[content] = postDto.content
+                it[uploadDate] = postDto.uploadDate
+            }
+        } > 0
+    }
 }

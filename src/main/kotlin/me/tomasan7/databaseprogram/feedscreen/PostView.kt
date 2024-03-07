@@ -3,7 +3,9 @@ package me.tomasan7.databaseprogram.feedscreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +21,10 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun Post(
     post: Post,
+    /** Whether the post is owned by the current user */
+    owned: Boolean,
     onCommentClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
     modifier: Modifier = Modifier
 )
 {
@@ -52,19 +57,29 @@ fun Post(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            TextButton(
-                onClick = onCommentClick,
-                modifier = Modifier.align(Alignment.End)
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = Icons.Default.Comment,
-                    contentDescription = null
-                )
-                HorizontalSpacer(6.dp)
-                Text(
-                    text = post.commentCount.toString(),
-                    style = MaterialTheme.typography.labelSmall
-                )
+                if (owned)
+                    IconButton(onEditClick) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit post",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                TextButton(onCommentClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.Comment,
+                        contentDescription = "Comments"
+                    )
+                    HorizontalSpacer(6.dp)
+                    Text(
+                        text = post.commentCount.toString(),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
             }
         }
     }
@@ -97,7 +112,7 @@ fun PostPreview()
 
     AppThemePreviewer {
         previewLightAndDark {
-            Post(post)
+            Post(post, owned = true)
         }
     }
 }

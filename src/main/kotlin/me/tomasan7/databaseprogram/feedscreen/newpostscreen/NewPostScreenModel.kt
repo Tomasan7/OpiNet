@@ -11,15 +11,21 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import me.tomasan7.databaseprogram.DatabaseProgram
+import me.tomasan7.databaseprogram.feedscreen.Post
 import me.tomasan7.databaseprogram.post.PostDto
 import me.tomasan7.databaseprogram.post.PostService
 
 class NewPostScreenModel(
     private val postService: PostService,
-    databaseProgram: DatabaseProgram
+    databaseProgram: DatabaseProgram,
+    private val editingPost: Post?,
 ) : ScreenModel
 {
-    var uiState by mutableStateOf(NewPostScreenState())
+    var uiState by mutableStateOf(NewPostScreenState(
+        isEditing = editingPost != null,
+        title = editingPost?.title ?: "",
+        content = editingPost?.content ?: ""
+    ))
         private set
 
     private val currentUser = databaseProgram.currentUser
@@ -32,6 +38,14 @@ class NewPostScreenModel(
 
     fun submit()
     {
+        if (editingPost != null)
+            submitPostUpdate()
+        else
+            submitPost()
+    }
+
+    private fun submitPost()
+    {
         val postDto = PostDto(
             title = uiState.title,
             content = uiState.content,
@@ -41,6 +55,22 @@ class NewPostScreenModel(
 
         screenModelScope.launch {
             postService.createPost(postDto)
+            changeUiState(goBackToFeedEvent = true)
+        }
+    }
+
+    private fun submitPostUpdate()
+    {
+        val postDto = PostDto(
+            id = editingPost!!.id,
+            title = uiState.title,
+            content = uiState.content,
+            uploadDate = editingPost.uploadDate,
+            authorId = editingPost.author.id
+        )
+
+        screenModelScope.launch {
+            postService.updatePost(postDto)
             changeUiState(goBackToFeedEvent = true)
         }
     }

@@ -14,17 +14,23 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
+import me.tomasan7.databaseprogram.feedscreen.Post
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 
-class NewPostScreen : Screen
+data class NewPostScreen(
+    /* Only set if we are editing an existing post */
+    val editingPost: Post? = null,
+    val oldTitle: String = "",
+    val oldContent: String = ""
+) : Screen
 {
     @Composable
     override fun Content()
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { NewPostScreenModel(databaseProgram.postService, databaseProgram) }
+        val model = rememberScreenModel { NewPostScreenModel(databaseProgram.postService, databaseProgram, editingPost) }
         val uiState = model.uiState
 
         if (uiState.goBackToFeedEvent)
@@ -49,7 +55,7 @@ class NewPostScreen : Screen
                 )
             }
             Text(
-                text = "Create new post",
+                text = if (!uiState.isEditing) "Create new post" else "Edit post",
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
@@ -73,7 +79,7 @@ class NewPostScreen : Screen
                     .fillMaxWidth()
             )
             Button({ model.submit() }) {
-                Text("Submit")
+                Text(if (!uiState.isEditing) "Submit" else "Save")
             }
         }
     }

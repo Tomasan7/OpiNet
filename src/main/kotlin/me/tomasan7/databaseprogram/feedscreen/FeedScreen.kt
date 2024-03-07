@@ -61,6 +61,12 @@ object FeedScreen : Screen
                 }
             )
 
+        if (uiState.editPostEvent != null)
+        {
+            model.editPostEventConsumed()
+            navigator push NewPostScreen(editingPost = uiState.editPostEvent)
+        }
+
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -82,9 +88,9 @@ object FeedScreen : Screen
                 uiState.posts.forEach { post ->
                     Post(
                         post = post,
-                        onCommentClick = {
-                            model.openComments(post.id)
-                        }
+                        owned = databaseProgram.currentUser.id == post.author.id,
+                        onEditClick = { model.editPost(post) },
+                        onCommentClick = { model.openComments(post.id) }
                     )
                 }
                 /* So when user scrolls to the bottom, the FAB doesn't cover any content */

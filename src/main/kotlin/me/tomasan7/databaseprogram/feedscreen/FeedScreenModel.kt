@@ -49,6 +49,16 @@ class FeedScreenModel(
         }
     }
 
+    fun editPost(post: Post)
+    {
+        uiState = uiState.copy(editPostEvent = post)
+    }
+
+    fun editPostEventConsumed()
+    {
+        uiState = uiState.copy(editPostEvent = null)
+    }
+
     fun openComments(postId: Int)
     {
         screenModelScope.launch {
