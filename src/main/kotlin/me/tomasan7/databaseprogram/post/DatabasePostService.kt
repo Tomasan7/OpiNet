@@ -3,6 +3,8 @@ package me.tomasan7.databaseprogram.post
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.tomasan7.databaseprogram.comment.CommentTable
+import me.tomasan7.databaseprogram.feedscreen.Post
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -51,15 +53,17 @@ class DatabasePostService(
             ?.toPostDto()
     }
 
-    override suspend fun getAllPosts() = dbQuery {
+    override suspend fun getAllPostsOrderedByUploadDateDesc() = dbQuery {
         PostTable.selectAll()
+            .orderBy(PostTable.uploadDate to SortOrder.DESC)
             .map { it.toPostDto() }
             .toImmutableList()
     }
 
-    override suspend fun getPostsByAuthorId(authorId: Int) = dbQuery {
+    override suspend fun getPostsByAuthorIdOrderedByUploadDateDesc(authorId: Int) = dbQuery {
         PostTable.selectAll()
             .where { PostTable.authorId eq authorId }
+            .orderBy(PostTable.uploadDate to SortOrder.DESC)
             .map { it.toPostDto() }
             .toImmutableList()
     }

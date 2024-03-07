@@ -17,10 +17,6 @@ import me.tomasan7.databaseprogram.comment.CommentService
 import me.tomasan7.databaseprogram.post.PostService
 import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
-import me.tomasan7.databaseprogram.user.UserTable.firstName
-import me.tomasan7.databaseprogram.user.UserTable.lastName
-import me.tomasan7.databaseprogram.user.UserTable.password
-import me.tomasan7.databaseprogram.user.UserTable.username
 
 class FeedScreenModel(
     private val userService: UserService,
@@ -39,7 +35,7 @@ class FeedScreenModel(
     fun loadPosts()
     {
         screenModelScope.launch {
-            val posts = postService.getAllPosts().map { postDto ->
+            val posts = postService.getAllPostsOrderedByUploadDateDesc().map { postDto ->
                 postDto.toPost(
                     authorGetter = { userId -> getUserDto(userId).toUser() },
                     commentCountGetter = { commentService.getNumberOfCommentsForPost(postDto.id!!).toInt() }
@@ -63,7 +59,7 @@ class FeedScreenModel(
     {
         screenModelScope.launch {
             val commentsForPost = commentService
-                .getAllCommentsForPost(postId)
+                .getAllCommentsForPostOrderedByUploadDateDesc(postId)
                 .map { it.toComment { getUserDto(it).toUser() } }
                 .toImmutableList()
             val newCommentsDialogState = FeedScreenState.CommentsDialogState(

@@ -51,9 +51,10 @@ class DatabaseCommentService(
             ?.toCommentDto()
     }
 
-    override suspend fun getAllCommentsForPost(postId: Int) = dbQuery {
+    override suspend fun getAllCommentsForPostOrderedByUploadDateDesc(postId: Int) = dbQuery {
         CommentTable.selectAll()
             .where { CommentTable.postId eq postId }
+            .orderBy(CommentTable.uploadDate to SortOrder.DESC)
             .map { it.toCommentDto() }
             .toImmutableList()
     }
