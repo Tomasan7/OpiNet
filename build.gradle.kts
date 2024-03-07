@@ -42,9 +42,12 @@ dependencies {
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenModel)
     implementation(libs.humanReadable)
+    implementation(libs.compose.file.picker)
 
     implementation(libs.diglolCrypto.kdf)
     implementation(libs.diglolCrypto.hash)
+
+    implementation(libs.kotlinCsv.jvm)
 }
 
 kotlin {

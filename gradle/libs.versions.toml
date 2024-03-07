@@ -9,12 +9,12 @@ kotlinx-collections-immutable = "0.3.7"
 compose = "1.6.0"
 voyager = "1.1.0-alpha03"
 human-readable = "1.7.0"
+compose-filePicker = "3.1.0"
 
 # Database
 exposed = "0.47.0"
 h2 = "2.2.224"
 mssql-jdbc = "12.6.1.jre11"
-
 
 # Config
 hoplite = "2.8.0.RC3"
@@ -26,6 +26,9 @@ kotlin-logging = "6.0.3"
 
 # Crypto
 diglol-crypto = "0.2.0"
+
+# Parsing
+kotlinCsv = "1.9.3"
 
 [libraries]
 # Kotlin
@@ -40,6 +43,7 @@ compose-previewer = { module = "com.github.alexfacciorusso:compose-previewer", v
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 humanReadable = { module = "nl.jacobras:Human-Readable", version.ref = "human-readable" }
+compose-file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "compose-filePicker" }
 
 # Database
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -60,6 +64,9 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = 
 # Crypto
 diglolCrypto-kdf = { module = "com.diglol.crypto:kdf", version.ref = "diglol-crypto" }
 diglolCrypto-hash = { module = "com.diglol.crypto:hash", version.ref = "diglol-crypto" }
+
+# Parsing
+kotlinCsv-jvm = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "kotlinCsv" }
 
 [bundles]
 

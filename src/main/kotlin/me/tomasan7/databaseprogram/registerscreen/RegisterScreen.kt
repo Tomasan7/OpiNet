@@ -3,6 +3,8 @@ package me.tomasan7.databaseprogram.registerscreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,6 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
+import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import me.tomasan7.databaseprogram.feedscreen.FeedScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.loginscreen.LoginScreen
@@ -25,18 +28,33 @@ data class RegisterScreen(
     private val password: String = "",
 ) : Screen
 {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content()
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { RegisterScreenModel(username, password, databaseProgram.userService, databaseProgram) }
+        val model = rememberScreenModel {
+            RegisterScreenModel(
+                username,
+                password,
+                databaseProgram.userService,
+                databaseProgram
+            )
+        }
         val uiState = model.uiState
 
         if (uiState.registrationSuccessEvent)
         {
             model.registrationSuccessEventConsumed()
             navigator push FeedScreen
+        }
+
+        FilePicker(uiState.filePickerOpen, fileExtensions = listOf("csv")) { mpFile ->
+            if (mpFile == null)
+                model.closeImportFilePicker()
+            else
+                model.onImportFileChosen(mpFile.path)
         }
 
         Column(
@@ -78,6 +96,23 @@ data class RegisterScreen(
                     text = "Go back to login",
                     style = MaterialTheme.typography.labelMedium
                 )
+            }
+            TooltipBox(
+                tooltip = {
+                    PlainTooltip {
+                        Text("Import users from CSV file")
+                    }
+                },
+                state = rememberTooltipState(),
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider()
+            ) {
+                IconButton({ model.onImportClick() }) {
+                    Icon(
+                        imageVector = Icons.Default.Download,
+                        contentDescription = "Import users",
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
         }
     }

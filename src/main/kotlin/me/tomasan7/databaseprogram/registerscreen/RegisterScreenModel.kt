@@ -3,14 +3,19 @@ package me.tomasan7.databaseprogram.registerscreen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Path
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.darkrockstudios.libraries.mpfilepicker.MPFile
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.sksamuel.hoplite.Undefined.path
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
 import me.tomasan7.databaseprogram.user.UsernameAlreadyExistsException
+import kotlin.io.path.Path
 
 private val logger = KotlinLogging.logger {}
 
@@ -40,6 +45,46 @@ class RegisterScreenModel(
 
     fun registrationSuccessEventConsumed() = changeUiState(registrationSuccessEvent = false)
 
+    fun onImportClick()
+    {
+        changeUiState(filePickerOpen = true)
+    }
+
+    fun onImportFileChosen(path: String)
+    {
+        screenModelScope.launch {
+            csvReader {
+                delimiter = ','
+            }.openAsync(path) {
+                readAllAsSequence().forEach { (username, firstName, lastName, password) ->
+                    val userDto = UserDto(
+                        username = username,
+                        firstName = firstName,
+                        lastName = lastName
+                    )
+                    try
+                    {
+                        userService.createUser(userDto, password)
+                        logger.info { "IMPORT: Imported $username - $firstName $lastName" }
+                    }
+                    catch (e: UsernameAlreadyExistsException)
+                    {
+                        logger.info { "IMPORT: $username - $firstName $lastName was not imported, because it already exists" }
+                    }
+                    catch (e: Exception)
+                    {
+                        logger.error { "IMPORT: $username - $firstName $lastName was not imported. (${e.message})" }
+                    }
+                }
+            }
+        }
+    }
+
+    fun closeImportFilePicker()
+    {
+        changeUiState(filePickerOpen = false)
+    }
+
     fun register()
     {
         if (uiState.username.isBlank()
@@ -47,7 +92,8 @@ class RegisterScreenModel(
             || uiState.lastName.isBlank()
             || uiState.password.isBlank()
             || uiState.confirmingPassword.isBlank()
-            || uiState.password != uiState.confirmingPassword)
+            || uiState.password != uiState.confirmingPassword
+        )
             return
 
         val userDto = UserDto(
@@ -83,7 +129,8 @@ class RegisterScreenModel(
         confirmingPassword: String? = null,
         passwordShown: Boolean? = null,
         confirmingPasswordShown: Boolean? = null,
-        registrationSuccessEvent: Boolean? = null
+        registrationSuccessEvent: Boolean? = null,
+        filePickerOpen: Boolean? = null
     )
     {
         uiState = uiState.copy(
@@ -94,7 +141,8 @@ class RegisterScreenModel(
             confirmingPassword = confirmingPassword ?: uiState.confirmingPassword,
             passwordShown = passwordShown ?: uiState.passwordShown,
             confirmingPasswordShown = confirmingPasswordShown ?: uiState.confirmingPasswordShown,
-            registrationSuccessEvent = registrationSuccessEvent ?: uiState.registrationSuccessEvent
+            registrationSuccessEvent = registrationSuccessEvent ?: uiState.registrationSuccessEvent,
+            filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
         )
     }
 
