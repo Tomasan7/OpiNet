@@ -80,7 +80,8 @@ fun PostPreview()
     val author = User(
         "dusan.kucharik",
         "Dušan",
-        "Kuchařík"
+        "Kuchařík",
+        0
     )
 
     val post = Post(

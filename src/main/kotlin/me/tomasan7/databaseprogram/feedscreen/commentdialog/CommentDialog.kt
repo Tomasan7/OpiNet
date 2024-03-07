@@ -192,7 +192,8 @@ private fun CommentDialogPreview()
             author = User(
                 firstName = "John",
                 lastName = "Doe",
-                username = "john.doe"
+                username = "john.doe",
+                id = 0
             ),
             uploadDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
             postId = 0, id = 0
