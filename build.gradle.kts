@@ -60,9 +60,9 @@ compose.desktop {
         mainClass = "me.tomasan7.opinet.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Msi)
             packageName = "OpiNet"
-            packageVersion = "1.0.0"
+            packageVersion = version.toString()
         }
     }
 }
