@@ -56,11 +56,11 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "me.tomasan7.databaseprogram.MainKt"
+        mainClass = "me.tomasan7.opinet.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "database-program"
+            packageName = "opinet"
             packageVersion = "1.0.0"
         }
     }

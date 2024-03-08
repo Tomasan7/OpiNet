@@ -1,4 +1,4 @@
-rootProject.name = "database-program"
+rootProject.name = "opinet"
 
 pluginManagement {
     repositories {
