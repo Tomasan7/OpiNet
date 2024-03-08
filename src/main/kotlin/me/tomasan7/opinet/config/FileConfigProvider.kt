@@ -11,12 +11,14 @@ class FileConfigProvider(
     private val path: String
 ) : ConfigProvider
 {
+    @OptIn(ExperimentalHoplite::class)
     override fun getConfig(): Config
     {
         createFileIfNotExists()
 
         return ConfigLoaderBuilder.default()
             .addFileSource(File(path))
+            .withExplicitSealedTypes()
             .addDecoder(CharDecoder)
             .addParameterMapper(KebabCaseParamMapper)
             .build()
