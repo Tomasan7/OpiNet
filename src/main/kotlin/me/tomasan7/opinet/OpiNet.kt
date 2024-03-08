@@ -8,10 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.singleWindowApplication
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -96,28 +100,25 @@ class OpiNet : ConfigProvider, ScreenModel
         }
     }
 
-    fun start() = application {
-        Window(
-            title = "OpiNet",
-            icon = painterResource("opinet.png"),
-            onCloseRequest = ::exitApplication
-        ) {
-            AppTheme {
-                Navigator(LoginScreen) { navigator ->
+    fun start() = singleWindowApplication(
+        title = "OpiNet",
+        icon = BitmapPainter(useResource("opinet.png", ::loadImageBitmap))
+    ) {
+        AppTheme {
+            Navigator(LoginScreen) { navigator ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
                     Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.background)
+                            .padding(16.dp),
                     ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
-                        ) {
-                            navigator.rememberNavigatorScreenModel { this@OpiNet }
-                            CurrentScreen()
-                        }
+                        navigator.rememberNavigatorScreenModel { this@OpiNet }
+                        CurrentScreen()
                     }
                 }
             }
