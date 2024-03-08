@@ -60,7 +60,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "opinet"
+            packageName = "OpiNet"
             packageVersion = "1.0.0"
         }
     }
