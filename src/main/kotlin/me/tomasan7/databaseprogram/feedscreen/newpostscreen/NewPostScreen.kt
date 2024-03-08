@@ -4,6 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,9 +15,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
+import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import me.tomasan7.databaseprogram.feedscreen.Post
 import me.tomasan7.databaseprogram.getDatabaseProgram
-import me.tomasan7.databaseprogram.ui.AppThemePreviewer
+import me.tomasan7.databaseprogram.util.AppThemePreviewer
 
 data class NewPostScreen(
     /* Only set if we are editing an existing post */
@@ -25,18 +27,26 @@ data class NewPostScreen(
     val oldContent: String = ""
 ) : Screen
 {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content()
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { NewPostScreenModel(databaseProgram.postService, databaseProgram, editingPost) }
+        val model = rememberScreenModel { NewPostScreenModel(databaseProgram.postService, databaseProgram.userService, databaseProgram, editingPost) }
         val uiState = model.uiState
 
         if (uiState.goBackToFeedEvent)
         {
             model.goBackToFeedEventConsumed()
             navigator.pop()
+        }
+
+        FilePicker(uiState.filePickerOpen, fileExtensions = listOf("csv")) { mpFile ->
+            if (mpFile == null)
+                model.closeImportFilePicker()
+            else
+                model.onImportFileChosen(mpFile.path)
         }
 
         Column(
@@ -80,6 +90,23 @@ data class NewPostScreen(
             )
             Button({ model.submit() }) {
                 Text(if (!uiState.isEditing) "Submit" else "Save")
+            }
+            TooltipBox(
+                tooltip = {
+                    PlainTooltip {
+                        Text("Import posts from CSV file")
+                    }
+                },
+                state = rememberTooltipState(),
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider()
+            ) {
+                IconButton({ model.onImportClick() }) {
+                    Icon(
+                        imageVector = Icons.Default.Download,
+                        contentDescription = "Import posts",
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
         }
     }

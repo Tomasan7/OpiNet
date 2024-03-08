@@ -1,17 +1,9 @@
-package me.tomasan7.databaseprogram.ui
+package me.tomasan7.databaseprogram.util
 
 import androidx.compose.runtime.Composable
 import com.alexfacciorusso.previewer.Previewer
 import com.alexfacciorusso.previewer.PreviewerScope
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
 import me.tomasan7.databaseprogram.ui.theme.AppTheme
-import java.time.format.DateTimeFormatter
-
-fun LocalDate.format(formatter: DateTimeFormatter): String
-{
-    return this.toJavaLocalDate().format(formatter)
-}
 
 @Composable
 fun AppThemePreviewer(content: PreviewerScope.() -> Unit) {

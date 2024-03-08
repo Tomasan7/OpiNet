@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -14,9 +16,16 @@ import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.feedscreen.Post
 import me.tomasan7.databaseprogram.post.PostDto
 import me.tomasan7.databaseprogram.post.PostService
+import me.tomasan7.databaseprogram.user.UserService
+import me.tomasan7.databaseprogram.util.now
+import me.tomasan7.databaseprogram.util.parseLocalDate
+import java.time.format.DateTimeFormatter
+
+private val logger = KotlinLogging.logger {}
 
 class NewPostScreenModel(
     private val postService: PostService,
+    private val userService: UserService,
     databaseProgram: DatabaseProgram,
     private val editingPost: Post?,
 ) : ScreenModel
@@ -75,16 +84,95 @@ class NewPostScreenModel(
         }
     }
 
+    fun onImportClick() = changeUiState(filePickerOpen = true)
+
+
+    fun closeImportFilePicker() = changeUiState(filePickerOpen = false)
+
+    fun onImportFileChosen(path: String)
+    {
+        screenModelScope.launch {
+            csvReader {
+                delimiter = ','
+            }.openAsync(path) {
+                readAllAsSequence().forEach { fields ->
+                    if (fields.size != 4)
+                    {
+                        logger.info { "IMPORT: Post was not imported, because it has ${fields.size} fields instead of 4" }
+                        return@forEach
+                    }
+
+                    val (authorUsername, uploadDateStr, title, content) = fields
+
+                    if (authorUsername.isBlank() || uploadDateStr.isBlank() || title.isBlank() || content.isBlank())
+                    {
+                        logger.info { "IMPORT: Post was not imported, because it has empty fields" }
+                        return@forEach
+                    }
+
+                    val uploadDate = try
+                    {
+                        uploadDateStr.parseLocalDate(importDateFormatter)
+                    }
+                    catch (e: Exception)
+                    {
+                        logger.info { "IMPORT: Post was not imported, because it has an invalid upload date format. dd.MM.yyyy is expected." }
+                        println(e)
+                        return@forEach
+                    }
+
+                    if (uploadDate > LocalDate.now())
+                    {
+                        logger.info { "IMPORT: Post was not imported, because it has an upload date in the future" }
+                        return@forEach
+                    }
+
+                    val author = userService.getUserByUsername(authorUsername)
+
+                    if (author == null)
+                    {
+                        logger.info { "IMPORT: Post was not imported, because user '$authorUsername' does not exist" }
+                        return@forEach
+                    }
+
+                    val postDto = PostDto(
+                        title = title,
+                        content = content,
+                        uploadDate = uploadDate,
+                        authorId = author.id!!
+                    )
+
+                    try
+                    {
+                        postService.createPost(postDto)
+                        logger.info { "IMPORT: Imported post titled '$title' by $authorUsername uploaded at $uploadDate" }
+                    }
+                    catch (e: Exception)
+                    {
+                        logger.error { "IMPORT: Post titled '$title' was not imported. (${e.message})" }
+                    }
+                }
+            }
+        }
+    }
+
     private fun changeUiState(
         title: String? = null,
         content: String? = null,
-        goBackToFeedEvent: Boolean? = null
+        goBackToFeedEvent: Boolean? = null,
+        filePickerOpen: Boolean? = null
     )
     {
         uiState = uiState.copy(
             title = title ?: uiState.title,
             content = content ?: uiState.content,
-            goBackToFeedEvent = goBackToFeedEvent ?: uiState.goBackToFeedEvent
+            goBackToFeedEvent = goBackToFeedEvent ?: uiState.goBackToFeedEvent,
+            filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
         )
+    }
+
+    companion object
+    {
+        private val importDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     }
 }

@@ -23,9 +23,9 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import me.tomasan7.databaseprogram.feedscreen.Comment
 import me.tomasan7.databaseprogram.feedscreen.User
-import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
-import me.tomasan7.databaseprogram.ui.format
+import me.tomasan7.databaseprogram.util.AppThemePreviewer
+import me.tomasan7.databaseprogram.util.format
 import java.time.format.DateTimeFormatter
 
 @Composable

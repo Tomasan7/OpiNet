@@ -18,9 +18,9 @@ import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import me.tomasan7.databaseprogram.feedscreen.FeedScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.loginscreen.LoginScreen
-import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.PasswordTextField
 import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
+import me.tomasan7.databaseprogram.util.AppThemePreviewer
 
 
 data class RegisterScreen(

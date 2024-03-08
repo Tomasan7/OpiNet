@@ -19,9 +19,9 @@ import com.alexfacciorusso.previewer.PreviewTheme
 import me.tomasan7.databaseprogram.feedscreen.FeedScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.registerscreen.RegisterScreen
-import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.PasswordTextField
 import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
+import me.tomasan7.databaseprogram.util.AppThemePreviewer
 
 object LoginScreen : Screen
 {

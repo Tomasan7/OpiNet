@@ -26,8 +26,8 @@ import com.alexfacciorusso.previewer.PreviewTheme
 import me.tomasan7.databaseprogram.feedscreen.commentdialog.CommentsDialog
 import me.tomasan7.databaseprogram.feedscreen.newpostscreen.NewPostScreen
 import me.tomasan7.databaseprogram.getDatabaseProgram
-import me.tomasan7.databaseprogram.ui.AppThemePreviewer
 import me.tomasan7.databaseprogram.ui.component.VerticalSpacer
+import me.tomasan7.databaseprogram.util.AppThemePreviewer
 
 object FeedScreen : Screen
 {
