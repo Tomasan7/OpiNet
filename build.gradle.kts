@@ -1,7 +1,5 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.config.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
