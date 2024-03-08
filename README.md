@@ -22,6 +22,21 @@ This project has no purpose as it directly interacts with the database, which ma
   <img alt="new post" src="readme-res/screenshots/newpost.png" width="300px" />
 </a>
 
+## Running
+
+### From JAR
+
+1. Go to [GitHub releases](https://github.com/Tomasan7/OpiNet/releases) open the latest release and download the JAR file.
+2. Open a terminal and navigate to the directory where the JAR file is located.
+3. Run the JAR file: `java -jar <jarfile>`
+4. Or just double-click the JAR file in file explorer.
+
+### From code
+
+1. Clone the repository: `git clone https://github.com/Tomasan7/OpiNet.git`
+2. Navigate to the project directory: `cd OpiNet`
+3. Run the project: `./gradlew run`
+
 ## Importing
 
 ### Users
