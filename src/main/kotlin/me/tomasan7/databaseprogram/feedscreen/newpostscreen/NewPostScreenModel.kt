@@ -12,8 +12,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.feedscreen.Post
+import me.tomasan7.databaseprogram.feedscreen.User
 import me.tomasan7.databaseprogram.post.PostDto
 import me.tomasan7.databaseprogram.post.PostService
 import me.tomasan7.databaseprogram.user.UserService
@@ -26,7 +26,7 @@ private val logger = KotlinLogging.logger {}
 class NewPostScreenModel(
     private val postService: PostService,
     private val userService: UserService,
-    databaseProgram: DatabaseProgram,
+    private val currentUser: User,
     private val editingPost: Post?,
 ) : ScreenModel
 {
@@ -36,8 +36,6 @@ class NewPostScreenModel(
         content = editingPost?.content ?: ""
     ))
         private set
-
-    private val currentUser = databaseProgram.currentUser
 
     fun setTitle(title: String) = changeUiState(title = title)
 
@@ -59,7 +57,7 @@ class NewPostScreenModel(
             title = uiState.title,
             content = uiState.content,
             uploadDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
-            authorId = currentUser.id!!
+            authorId = currentUser.id
         )
 
         screenModelScope.launch {

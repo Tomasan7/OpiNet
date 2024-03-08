@@ -9,8 +9,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
@@ -43,7 +45,7 @@ object FeedScreen : Screen
                 databaseProgram.userService,
                 databaseProgram.postService,
                 databaseProgram.commentService,
-                databaseProgram
+                databaseProgram.currentUser.toUser()
             )
         }
         val uiState = model.uiState

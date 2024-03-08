@@ -17,6 +17,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.alexfacciorusso.previewer.PreviewTheme
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import me.tomasan7.databaseprogram.feedscreen.Post
+import me.tomasan7.databaseprogram.feedscreen.toUser
 import me.tomasan7.databaseprogram.getDatabaseProgram
 import me.tomasan7.databaseprogram.util.AppThemePreviewer
 
@@ -33,7 +34,12 @@ data class NewPostScreen(
     {
         val navigator = LocalNavigator.currentOrThrow
         val databaseProgram = navigator.getDatabaseProgram()
-        val model = rememberScreenModel { NewPostScreenModel(databaseProgram.postService, databaseProgram.userService, databaseProgram, editingPost) }
+        val model = rememberScreenModel { NewPostScreenModel(
+            databaseProgram.postService,
+            databaseProgram.userService,
+            databaseProgram.currentUser.toUser(),
+            editingPost
+        ) }
         val uiState = model.uiState
 
         if (uiState.goBackToFeedEvent)

@@ -11,33 +11,29 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import me.tomasan7.databaseprogram.DatabaseProgram
 import me.tomasan7.databaseprogram.comment.CommentDto
 import me.tomasan7.databaseprogram.comment.CommentService
 import me.tomasan7.databaseprogram.post.PostService
-import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
 
 class FeedScreenModel(
     private val userService: UserService,
     private val postService: PostService,
     private val commentService: CommentService,
-    private val databaseProgram: DatabaseProgram
+    private val currentUser: User
 ) : ScreenModel
 {
     var uiState by mutableStateOf(FeedScreenState())
         private set
 
-    private val cachedUsers = mutableMapOf<Int, UserDto>(
-        databaseProgram.currentUser.id!! to databaseProgram.currentUser
-    )
+    private val cachedUsers = mutableMapOf<Int, User>(currentUser.id to currentUser)
 
     fun loadPosts()
     {
         screenModelScope.launch {
             val posts = postService.getAllPostsOrderedByUploadDateDesc().map { postDto ->
                 postDto.toPost(
-                    authorGetter = { userId -> getUserDto(userId).toUser() },
+                    authorGetter = { userId -> getUser(userId) },
                     commentCountGetter = { commentService.getNumberOfCommentsForPost(postDto.id!!).toInt() }
                 )
             }.toImmutableList()
@@ -69,7 +65,7 @@ class FeedScreenModel(
         screenModelScope.launch {
             val commentsForPost = commentService
                 .getAllCommentsForPostOrderedByUploadDateDesc(postId)
-                .map { it.toComment { getUserDto(it).toUser() } }
+                .map { it.toComment { userId -> getUser(userId) } }
                 .toImmutableList()
             val newCommentsDialogState = FeedScreenState.CommentsDialogState(
                 postId = postId,
@@ -90,12 +86,12 @@ class FeedScreenModel(
         screenModelScope.launch {
             val commentDto = CommentDto(
                 text = commentText,
-                authorId = databaseProgram.currentUser.id!!,
+                authorId = currentUser.id,
                 uploadDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
                 postId = postId
             )
             val newCommentId = commentService.createComment(commentDto)
-            val newCommentDto = commentDto.copy(id = newCommentId).toComment { getUserDto(it).toUser() }
+            val newCommentDto = commentDto.copy(id = newCommentId).toComment { getUser(it) }
             val oldComments = uiState.commentsDialogState.comments
             val newComments = (oldComments + newCommentDto).toImmutableList()
             val oldPost = uiState.posts.find { it.id == postId }!!
@@ -110,10 +106,10 @@ class FeedScreenModel(
         }
     }
 
-    private suspend fun getUserDto(id: Int): UserDto
+    private suspend fun getUser(id: Int): User
     {
         return cachedUsers.getOrPut(id) {
-            userService.getUserById(id)!!
+            userService.getUserById(id)!!.toUser()
         }
     }
 
