@@ -1,4 +1,7 @@
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.config.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -41,10 +44,10 @@ dependencies {
     implementation(libs.compose.previewer)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenModel)
-    implementation(libs.humanReadable)
+    //implementation(libs.humanReadable)
     implementation(libs.compose.file.picker)
 
-    implementation(libs.diglolCrypto.kdf)
+    //implementation(libs.diglolCrypto.kdf)
     implementation(libs.diglolCrypto.hash)
 
     implementation(libs.kotlinCsv.jvm)
@@ -64,4 +67,9 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+/* mssql-jdbc includes some stupid signatures, which make the resulting jar unrunnable */
+tasks.withType<Jar> {
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
