@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 import me.tomasan7.opinet.OpiNet
 import me.tomasan7.opinet.user.UserService
+
+private val logger = KotlinLogging.logger { }
 
 class LoginScreenModel(
     private val userService: UserService,
@@ -40,6 +43,10 @@ class LoginScreenModel(
             {
                 opiNet.currentUser = userService.getUserByUsername(username)!!
                 changeUiState(loginSuccessEvent = true)
+            }
+            else
+            {
+                logger.info { "Incorrect password for $username" }
             }
         }
     }
