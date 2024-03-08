@@ -12,9 +12,15 @@ import com.sksamuel.hoplite.Undefined.path
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 import me.tomasan7.databaseprogram.DatabaseProgram
+import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.user.UserDto
 import me.tomasan7.databaseprogram.user.UserService
+import me.tomasan7.databaseprogram.user.UserTable.firstName
+import me.tomasan7.databaseprogram.user.UserTable.lastName
+import me.tomasan7.databaseprogram.user.UserTable.password
+import me.tomasan7.databaseprogram.user.UserTable.username
 import me.tomasan7.databaseprogram.user.UsernameAlreadyExistsException
+import java.time.format.DateTimeFormatter
 import kotlin.io.path.Path
 
 private val logger = KotlinLogging.logger {}
@@ -23,7 +29,8 @@ class RegisterScreenModel(
     username: String = "",
     password: String = "",
     private val userService: UserService,
-    private val databaseProgram: DatabaseProgram
+    private val databaseProgram: DatabaseProgram,
+    private val importConfig: Config.Import
 ) : ScreenModel
 {
     var uiState by mutableStateOf(RegisterScreenState(username = username, password = password))
@@ -54,9 +61,17 @@ class RegisterScreenModel(
     {
         screenModelScope.launch {
             csvReader {
-                delimiter = ','
+                delimiter = importConfig.csvDelimiter
             }.openAsync(path) {
-                readAllAsSequence().forEach { (username, firstName, lastName, password) ->
+                readAllAsSequence().forEach { fields ->
+                    if (fields.size != 3)
+                    {
+                        logger.warn { "IMPORT: Skipped line because it had ${fields.size} fields instead of 3" }
+                        return@forEach
+                    }
+
+                    val (username, firstName, lastName, password) = fields
+
                     val userDto = UserDto(
                         username = username,
                         firstName = firstName,

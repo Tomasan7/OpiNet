@@ -38,7 +38,8 @@ data class NewPostScreen(
             databaseProgram.postService,
             databaseProgram.userService,
             databaseProgram.currentUser.toUser(),
-            editingPost
+            editingPost,
+            databaseProgram.getConfig().import
         ) }
         val uiState = model.uiState
 

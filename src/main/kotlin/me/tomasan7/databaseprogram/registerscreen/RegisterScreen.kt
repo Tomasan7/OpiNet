@@ -39,7 +39,8 @@ data class RegisterScreen(
                 username,
                 password,
                 databaseProgram.userService,
-                databaseProgram
+                databaseProgram,
+                databaseProgram.getConfig().import
             )
         }
         val uiState = model.uiState

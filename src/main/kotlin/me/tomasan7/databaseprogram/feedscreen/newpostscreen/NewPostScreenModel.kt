@@ -12,6 +12,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import me.tomasan7.databaseprogram.config.Config
 import me.tomasan7.databaseprogram.feedscreen.Post
 import me.tomasan7.databaseprogram.feedscreen.User
 import me.tomasan7.databaseprogram.post.PostDto
@@ -28,6 +29,7 @@ class NewPostScreenModel(
     private val userService: UserService,
     private val currentUser: User,
     private val editingPost: Post?,
+    private val importConfig: Config.Import
 ) : ScreenModel
 {
     var uiState by mutableStateOf(NewPostScreenState(
@@ -89,9 +91,19 @@ class NewPostScreenModel(
 
     fun onImportFileChosen(path: String)
     {
+        val dateFormatter = try
+        {
+            DateTimeFormatter.ofPattern(importConfig.dateFormat)
+        }
+        catch (e: IllegalArgumentException)
+        {
+            logger.warn { "IMPORT: Configured date format is not valid (${importConfig.dateFormat}), aborting import..." }
+            return
+        }
+
         screenModelScope.launch {
             csvReader {
-                delimiter = ','
+                delimiter = importConfig.csvDelimiter
             }.openAsync(path) {
                 readAllAsSequence().forEach { fields ->
                     if (fields.size != 4)
@@ -110,7 +122,7 @@ class NewPostScreenModel(
 
                     val uploadDate = try
                     {
-                        uploadDateStr.parseLocalDate(importDateFormatter)
+                        uploadDateStr.parseLocalDate(dateFormatter)
                     }
                     catch (e: Exception)
                     {
@@ -167,10 +179,5 @@ class NewPostScreenModel(
             goBackToFeedEvent = goBackToFeedEvent ?: uiState.goBackToFeedEvent,
             filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
         )
-    }
-
-    companion object
-    {
-        private val importDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     }
 }

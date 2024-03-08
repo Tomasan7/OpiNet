@@ -17,6 +17,7 @@ class FileConfigProvider(
 
         return ConfigLoaderBuilder.default()
             .addFileSource(File(path))
+            .addDecoder(CharDecoder)
             .addParameterMapper(KebabCaseParamMapper)
             .build()
             .loadConfigOrThrow()
