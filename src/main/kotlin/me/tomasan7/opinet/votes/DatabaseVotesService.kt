@@ -59,4 +59,8 @@ class DatabaseVotesService(
     override suspend fun removeVoteByUserOnPost(userId: Int, postId: Int): Boolean = dbQuery {
         VotesTable.deleteWhere { (VotesTable.userId eq userId) and (VotesTable.postId eq postId) } > 0
     }
+
+    override suspend fun deleteVotesForPost(postId: Int): Unit = dbQuery {
+        VotesTable.deleteWhere { VotesTable.postId eq postId }
+    }
 }

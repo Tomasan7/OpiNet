@@ -4,13 +4,15 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.tomasan7.opinet.comment.CommentService
+import me.tomasan7.opinet.votes.VotesService
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabasePostService(
     private val database: Database,
-    private val commentService: CommentService
+    private val commentService: CommentService,
+    private val votesService: VotesService
 ) : PostService
 {
     private suspend fun <T> dbQuery(statement: Transaction.() -> T) = withContext(Dispatchers.IO) {
@@ -86,6 +88,7 @@ class DatabasePostService(
     override suspend fun deletePost(id: Int): Boolean
     {
         commentService.deleteCommentsForPost(id)
+        votesService.deleteVotesForPost(id)
 
         return dbQuery {
             PostTable.deleteWhere { PostTable.id eq id } > 0

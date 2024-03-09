@@ -8,4 +8,5 @@ interface VotesService
     suspend fun getVotesOnPost(postId: Int): ImmutableList<VoteDto>
     suspend fun getPostsOrderedByVotes(): ImmutableList<Int>
     suspend fun removeVoteByUserOnPost(userId: Int, postId: Int): Boolean
+    suspend fun deleteVotesForPost(postId: Int)
 }

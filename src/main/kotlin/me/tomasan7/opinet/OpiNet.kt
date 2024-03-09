@@ -100,8 +100,8 @@ class OpiNet : ConfigProvider, ScreenModel
         runBlocking {
             userService = DatabaseUserService(database).also { it.init() }
             commentService = DatabaseCommentService(database).also { it.init() }
-            postService = DatabasePostService(database, commentService).also { it.init() }
             votesService = DatabaseVotesService(database).also { it.init() }
+            postService = DatabasePostService(database, commentService, votesService).also { it.init() }
         }
     }
 
