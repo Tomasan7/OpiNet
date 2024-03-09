@@ -55,7 +55,7 @@ class RegisterScreenModel(
                 delimiter = importConfig.csvDelimiter
             }.openAsync(path) {
                 readAllAsSequence().forEach { fields ->
-                    if (fields.size != 3)
+                    if (fields.size != 4)
                     {
                         logger.warn { "IMPORT: Skipped line because it had ${fields.size} fields instead of 3" }
                         return@forEach
