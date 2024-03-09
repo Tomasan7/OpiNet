@@ -80,19 +80,10 @@ class OpiNet : ConfigProvider, ScreenModel
     {
         val dbConf = config.database
 
-        database = if (dbConf.driver != null)
-            Database.connect(
-                url = dbConf.url,
-                driver = dbConf.driver,
-                user = dbConf.user ?: "",
-                password = dbConf.password ?: ""
-            )
-        else
-            Database.connect(
-                url = dbConf.url,
-                user = dbConf.user ?: "",
-                password = dbConf.password ?: ""
-            )
+        database = Database.connect(
+            url = dbConf.url,
+            driver = dbConf.driver,
+        )
     }
 
     private fun initServices()

@@ -8,9 +8,7 @@ data class Config(
 {
     data class Database(
         val url: String,
-        val driver: String?,
-        val user: String?,
-        val password: String?
+        val driver: String
     )
 
     data class Import(
