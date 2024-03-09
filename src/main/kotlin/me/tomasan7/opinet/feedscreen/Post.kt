@@ -9,17 +9,27 @@ data class Post(
     val author: User,
     val uploadDate: LocalDate,
     val commentCount: Int,
+    val voted: Boolean?,
+    val upVotes: Int,
+    val downVotes: Int,
     val id: Int
 )
 
 inline fun PostDto.toPost(
+    voted: Boolean?,
     authorGetter: (Int) -> User,
-    commentCountGetter: (Int) -> Int
-) = Post(
-    title = title,
-    content = content,
-    author = authorGetter(authorId),
-    commentCount = commentCountGetter(id!!),
-    uploadDate = uploadDate,
-    id = id
-)
+    commentCountGetter: (Int) -> Int,
+    votesGetter: (Int) -> Pair<Int, Int>
+) = votesGetter(id!!).let { (upVotes, downVotes) ->
+    Post(
+        title = title,
+        content = content,
+        author = authorGetter(authorId),
+        commentCount = commentCountGetter(id),
+        uploadDate = uploadDate,
+        voted = voted,
+        upVotes = upVotes,
+        downVotes = downVotes,
+        id = id
+    )
+}

@@ -4,10 +4,12 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alexfacciorusso.previewer.previewLightAndDark
@@ -25,6 +27,8 @@ fun Post(
     onCommentClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
+    /** `true` if the user up-voted, `false` if the user down-voted, `null` if the user removed their vote */
+    onVote: (Boolean?) -> Unit = {},
     modifier: Modifier = Modifier
 )
 {
@@ -78,6 +82,12 @@ fun Post(
                         )
                     }
                 }
+                Votes(
+                    voted = post.voted,
+                    onVote = onVote,
+                    upVotes = post.upVotes,
+                    downVotes = post.downVotes
+                )
                 TextButton(onCommentClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.Comment,
@@ -91,6 +101,48 @@ fun Post(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun Votes(
+    /** `true` if the user up-voted, `false` if the user down-voted, `null` if the user didn't vote */
+    voted: Boolean?,
+    /** `true` if the user up-voted, `false` if the user down-voted, `null` if the user removed their vote */
+    onVote: (Boolean?) -> Unit,
+    upVotes: Int,
+    downVotes: Int
+)
+{
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy((-15).dp)
+    ) {
+        IconButton(
+            onClick = { if(voted == true) onVote(null) else onVote(true) }
+        ) {
+            Icon(
+                imageVector = if (voted == true) Icons.Default.KeyboardDoubleArrowUp else Icons.Default.KeyboardArrowUp,
+                contentDescription = "Up-vote",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        IconButton(
+            onClick = { if(voted == false) onVote(null) else onVote(false) }
+        ) {
+            Icon(
+                imageVector = if (voted == false) Icons.Default.KeyboardDoubleArrowDown else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Down-vote",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        val voteNumber by derivedStateOf { upVotes - downVotes }
+        Text(
+            text = voteNumber.toString(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 4.dp)
+        )
     }
 }
 
@@ -116,6 +168,9 @@ fun PostPreview()
         author,
         LocalDate(2021, 10, 15),
         5,
+        true,
+        5,
+        3,
         1
     )
 

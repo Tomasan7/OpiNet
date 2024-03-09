@@ -34,6 +34,8 @@ import me.tomasan7.opinet.ui.theme.AppTheme
 import me.tomasan7.opinet.user.DatabaseUserService
 import me.tomasan7.opinet.user.UserDto
 import me.tomasan7.opinet.user.UserService
+import me.tomasan7.opinet.votes.DatabaseVotesService
+import me.tomasan7.opinet.votes.VotesService
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -50,6 +52,8 @@ class OpiNet : ConfigProvider, ScreenModel
     lateinit var postService: PostService
         private set
     lateinit var commentService: CommentService
+        private set
+    lateinit var votesService: VotesService
         private set
 
     fun init()
@@ -97,6 +101,7 @@ class OpiNet : ConfigProvider, ScreenModel
             userService = DatabaseUserService(database).also { it.init() }
             commentService = DatabaseCommentService(database).also { it.init() }
             postService = DatabasePostService(database, commentService).also { it.init() }
+            votesService = DatabaseVotesService(database).also { it.init() }
         }
     }
 

@@ -45,6 +45,7 @@ object FeedScreen : Screen
                 opiNet.userService,
                 opiNet.postService,
                 opiNet.commentService,
+                opiNet.votesService,
                 opiNet.currentUser.toUser()
             )
         }
@@ -102,6 +103,7 @@ object FeedScreen : Screen
                             owned = opiNet.currentUser.id == post.author.id,
                             onEditClick = { model.editPost(post) },
                             onDeleteClick = { model.deletePost(post) },
+                            onVote = { model.voteOnPost(post, it) },
                             onCommentClick = { model.openComments(post.id) }
                         )
                     }
