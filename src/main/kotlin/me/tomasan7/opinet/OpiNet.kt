@@ -83,6 +83,8 @@ class OpiNet : ConfigProvider, ScreenModel
         database = Database.connect(
             url = dbConf.url,
             driver = dbConf.driver,
+            user = dbConf.user,
+            password = dbConf.password.value,
         )
     }
 
