@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.tomasan7.opinet.OpiNet
 import me.tomasan7.opinet.user.UserService
+import java.nio.channels.UnresolvedAddressException
 
 private val logger = KotlinLogging.logger { }
 
@@ -20,33 +22,60 @@ class LoginScreenModel(
     var uiState by mutableStateOf(LoginScreenState())
         private set
 
-    fun setUsername(username: String) = changeUiState(username = username.removeWhitespace())
+    private var loginJob: Job? = null
 
-    fun setPassword(password: String) = changeUiState(password = password.removeWhitespace())
+    fun setUsername(username: String) = changeUiState(username = username.removeWhitespace(), errorText = "")
+
+    fun setPassword(password: String) = changeUiState(password = password.removeWhitespace(), errorText = "")
 
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
 
-    fun loginSuccessEventConsumed() = changeUiState(loginSuccessEvent = false)
+    fun loginSuccessEventConsumed() = changeUiState(loginSuccessEvent = false, errorText = "")
 
     fun login()
     {
-        screenModelScope.launch {
+        loginJob?.cancel()
+
+        if (uiState.username.isBlank())
+        {
+            changeUiState(errorText = "Username cannot be blank")
+            return
+        }
+        else if (uiState.password.isBlank())
+        {
+            changeUiState(errorText = "Password cannot be blank")
+            return
+        }
+
+        loginJob = screenModelScope.launch {
             val username = uiState.username
             val password = uiState.password
 
             if (username.isBlank() || password.isBlank())
                 return@launch
 
-            val success = userService.loginUser(username, password)
+            try
+            {
+                val success = userService.loginUser(username, password)
 
-            if (success)
-            {
-                opiNet.currentUser = userService.getUserByUsername(username)!!
-                changeUiState(loginSuccessEvent = true)
+                if (success)
+                {
+                    opiNet.currentUser = userService.getUserByUsername(username)!!
+                    changeUiState(loginSuccessEvent = true)
+                }
+                else
+                {
+                    changeUiState(errorText = "Incorrect username or password")
+                }
             }
-            else
+            catch (e: UnresolvedAddressException)
             {
-                logger.info { "Incorrect password for $username" }
+                changeUiState(errorText = "There was an error connecting to the database, check your internet connection")
+            }
+            catch (e: Exception)
+            {
+                changeUiState(errorText = "There was an unknown error")
+                e.printStackTrace()
             }
         }
     }
@@ -57,6 +86,7 @@ class LoginScreenModel(
         lastName: String? = null,
         password: String? = null,
         passwordShown: Boolean? = null,
+        errorText: String? = null,
         loginSuccessEvent: Boolean? = null
     )
     {
@@ -66,6 +96,7 @@ class LoginScreenModel(
             lastName = lastName ?: uiState.lastName,
             password = password ?: uiState.password,
             passwordShown = passwordShown ?: uiState.passwordShown,
+            errorText = errorText ?: uiState.errorText,
             loginSuccessEvent = loginSuccessEvent ?: uiState.loginSuccessEvent
         )
     }

@@ -67,28 +67,42 @@ data class RegisterScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
             VerticalSpacer(16.dp)
-            TextField(value = uiState.username,
+            TextField(
+                value = uiState.username,
                 singleLine = true,
                 onValueChange = { model.setUsername(it) },
-                label = { Text("Username") })
-            TextField(value = uiState.firstName,
+                label = { Text("Username") }
+            )
+            TextField(
+                value = uiState.firstName,
                 singleLine = true,
                 onValueChange = { model.setFirstName(it) },
-                label = { Text("First name") })
-            TextField(value = uiState.lastName,
+                label = { Text("First name") }
+            )
+            TextField(
+                value = uiState.lastName,
                 singleLine = true,
                 onValueChange = { model.setLastName(it) },
-                label = { Text("Last name") })
-            PasswordTextField(password = uiState.password,
+                label = { Text("Last name") }
+            )
+            PasswordTextField(
+                password = uiState.password,
                 onPasswordChange = { model.setPassword(it) },
                 onChangeVisibilityClick = { model.changePasswordVisibility() },
                 passwordShown = uiState.passwordShown,
-                label = { Text("Password") })
-            PasswordTextField(password = uiState.confirmingPassword,
+                label = { Text("Password") }
+            )
+            PasswordTextField(
+                password = uiState.confirmingPassword,
                 onPasswordChange = { model.setConfirmingPassword(it) },
                 onChangeVisibilityClick = { model.changeConfirmingPasswordVisibility() },
                 passwordShown = uiState.confirmingPasswordShown,
-                label = { Text("Confirm password") })
+                label = { Text("Confirm password") }
+            )
+            Text(
+                text = uiState.errorText,
+                color = MaterialTheme.colorScheme.error
+            )
             Button({ model.register() }) {
                 Text("Register")
             }

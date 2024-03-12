@@ -34,17 +34,24 @@ class FeedScreenModel(
     fun loadPosts()
     {
         screenModelScope.launch {
-            val posts = postService.getAllPostsOrderedByUploadDateDesc().map { postDto ->
-                val votesOnPost = votesService.getVotesOnPost(postDto.id!!)
-                val voted = votesOnPost.find { it.userId == currentUser.id }?.upDown
-                postDto.toPost(
-                    authorGetter = { userId -> getUser(userId) },
-                    voted = voted,
-                    commentCountGetter = { commentService.getNumberOfCommentsForPost(postDto.id!!).toInt() },
-                    votesGetter = { votesOnPost.count { it.upDown } to votesOnPost.count { !it.upDown } }
-                )
-            }.toImmutableList()
-            changeUiState(posts = posts)
+            try
+            {
+                val posts = postService.getAllPostsOrderedByUploadDateDesc().map { postDto ->
+                    val votesOnPost = votesService.getVotesOnPost(postDto.id!!)
+                    val voted = votesOnPost.find { it.userId == currentUser.id }?.upDown
+                    postDto.toPost(
+                        authorGetter = { userId -> getUser(userId) },
+                        voted = voted,
+                        commentCountGetter = { commentService.getNumberOfCommentsForPost(postDto.id!!).toInt() },
+                        votesGetter = { votesOnPost.count { it.upDown } to votesOnPost.count { !it.upDown } }
+                    )
+                }.toImmutableList()
+                changeUiState(posts = posts)
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -70,16 +77,23 @@ class FeedScreenModel(
     fun openComments(postId: Int)
     {
         screenModelScope.launch {
-            val commentsForPost = commentService
-                .getAllCommentsForPostOrderedByUploadDateDesc(postId)
-                .map { it.toComment { userId -> getUser(userId) } }
-                .toImmutableList()
-            val newCommentsDialogState = FeedScreenState.CommentsDialogState(
-                postId = postId,
-                comments = commentsForPost,
-                isOpen = true
-            )
-            changeUiState(commentsDialogState = newCommentsDialogState)
+            try
+            {
+                val commentsForPost = commentService
+                    .getAllCommentsForPostOrderedByUploadDateDesc(postId)
+                    .map { it.toComment { userId -> getUser(userId) } }
+                    .toImmutableList()
+                val newCommentsDialogState = FeedScreenState.CommentsDialogState(
+                    postId = postId,
+                    comments = commentsForPost,
+                    isOpen = true
+                )
+                changeUiState(commentsDialogState = newCommentsDialogState)
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -91,25 +105,32 @@ class FeedScreenModel(
     fun postComment(commentText: String, postId: Int)
     {
         screenModelScope.launch {
-            val commentDto = CommentDto(
-                text = commentText,
-                authorId = currentUser.id,
-                uploadDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
-                postId = postId
-            )
-            val newCommentId = commentService.createComment(commentDto)
-            val newCommentDto = commentDto.copy(id = newCommentId).toComment { getUser(it) }
-            val oldComments = uiState.commentsDialogState.comments
-            val newComments = (oldComments + newCommentDto).toImmutableList()
-            val oldPost = uiState.posts.find { it.id == postId }!!
-            val newPost = oldPost.copy(
-                commentCount = oldPost.commentCount + 1
-            )
-            val newPosts = (uiState.posts - oldPost) + newPost
-            changeUiState(
-                commentsDialogState = uiState.commentsDialogState.copy(comments = newComments),
-                posts = newPosts.toImmutableList()
-            )
+            try
+            {
+                val commentDto = CommentDto(
+                    text = commentText,
+                    authorId = currentUser.id,
+                    uploadDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                    postId = postId
+                )
+                val newCommentId = commentService.createComment(commentDto)
+                val newCommentDto = commentDto.copy(id = newCommentId).toComment { getUser(it) }
+                val oldComments = uiState.commentsDialogState.comments
+                val newComments = (oldComments + newCommentDto).toImmutableList()
+                val oldPost = uiState.posts.find { it.id == postId }!!
+                val newPost = oldPost.copy(
+                    commentCount = oldPost.commentCount + 1
+                )
+                val newPosts = (uiState.posts - oldPost) + newPost
+                changeUiState(
+                    commentsDialogState = uiState.commentsDialogState.copy(comments = newComments),
+                    posts = newPosts.toImmutableList()
+                )
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -124,37 +145,51 @@ class FeedScreenModel(
     private fun addVoteOnPost(post: Post, value: Boolean)
     {
         screenModelScope.launch {
-            val previousVote = post.voted
-            if (previousVote != null)
-                votesService.removeVoteByUserOnPost(currentUser.id, post.id)
-            val voteDto = VoteDto(
-                upDown = value,
-                votedAt = Clock.System.now(),
-                userId = currentUser.id,
-                postId = post.id
-            )
-            votesService.createVote(voteDto)
-            val newPost = post.copy(
-                voted = value,
-                upVotes = post.upVotes + if (value) 1 else 0 - if (previousVote == true) 1 else 0,
-                downVotes = post.downVotes + if (!value) 1 else 0 - if (previousVote == false) 1 else 0
-            )
-            changeUiState(posts = uiState.posts.replace(post, newPost).toImmutableList())
+            try
+            {
+                val previousVote = post.voted
+                if (previousVote != null)
+                    votesService.removeVoteByUserOnPost(currentUser.id, post.id)
+                val voteDto = VoteDto(
+                    upDown = value,
+                    votedAt = Clock.System.now(),
+                    userId = currentUser.id,
+                    postId = post.id
+                )
+                votesService.createVote(voteDto)
+                val newPost = post.copy(
+                    voted = value,
+                    upVotes = post.upVotes + if (value) 1 else 0 - if (previousVote == true) 1 else 0,
+                    downVotes = post.downVotes + if (!value) 1 else 0 - if (previousVote == false) 1 else 0
+                )
+                changeUiState(posts = uiState.posts.replace(post, newPost).toImmutableList())
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
     private fun removeVoteOnPost(post: Post)
     {
         screenModelScope.launch {
-            val result = votesService.removeVoteByUserOnPost(currentUser.id, post.id)
-            if (result)
+            try
             {
-                val newPost = post.copy(
-                    voted = null,
-                    upVotes = post.upVotes - if (post.voted!!) 1 else 0,
-                    downVotes = post.downVotes - if (!post.voted) 1 else 0
-                )
-                changeUiState(posts = uiState.posts.replace(post, newPost).toImmutableList())
+                val result = votesService.removeVoteByUserOnPost(currentUser.id, post.id)
+                if (result)
+                {
+                    val newPost = post.copy(
+                        voted = null,
+                        upVotes = post.upVotes - if (post.voted!!) 1 else 0,
+                        downVotes = post.downVotes - if (!post.voted) 1 else 0
+                    )
+                    changeUiState(posts = uiState.posts.replace(post, newPost).toImmutableList())
+                }
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
             }
         }
     }

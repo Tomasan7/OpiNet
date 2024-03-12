@@ -63,8 +63,15 @@ class NewPostScreenModel(
         )
 
         screenModelScope.launch {
-            postService.createPost(postDto)
-            changeUiState(goBackToFeedEvent = true)
+            try
+            {
+                postService.createPost(postDto)
+                changeUiState(goBackToFeedEvent = true)
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -79,13 +86,19 @@ class NewPostScreenModel(
         )
 
         screenModelScope.launch {
-            postService.updatePost(postDto)
-            changeUiState(goBackToFeedEvent = true)
+            try
+            {
+                postService.updatePost(postDto)
+                changeUiState(goBackToFeedEvent = true)
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
         }
     }
 
     fun onImportClick() = changeUiState(filePickerOpen = true)
-
 
     fun closeImportFilePicker() = changeUiState(filePickerOpen = false)
 

@@ -13,6 +13,7 @@ import me.tomasan7.opinet.config.Config
 import me.tomasan7.opinet.user.UserDto
 import me.tomasan7.opinet.user.UserService
 import me.tomasan7.opinet.user.UsernameAlreadyExistsException
+import java.nio.channels.UnresolvedAddressException
 
 private val logger = KotlinLogging.logger {}
 
@@ -27,21 +28,21 @@ class RegisterScreenModel(
     var uiState by mutableStateOf(RegisterScreenState(username = username, password = password))
         private set
 
-    fun setUsername(username: String) = changeUiState(username = username.removeWhitespace())
+    fun setUsername(username: String) = changeUiState(username = username.removeWhitespace(), errorText = "")
 
-    fun setFirstName(firstName: String) = changeUiState(firstName = firstName.removeWhitespace())
+    fun setFirstName(firstName: String) = changeUiState(firstName = firstName.removeWhitespace(), errorText = "")
 
-    fun setLastName(lastName: String) = changeUiState(lastName = lastName.removeWhitespace())
+    fun setLastName(lastName: String) = changeUiState(lastName = lastName.removeWhitespace(), errorText = "")
 
-    fun setPassword(password: String) = changeUiState(password = password.removeWhitespace())
+    fun setPassword(password: String) = changeUiState(password = password.removeWhitespace(), errorText = "")
 
-    fun setConfirmingPassword(confirmingPassword: String) = changeUiState(confirmingPassword = confirmingPassword.removeWhitespace())
+    fun setConfirmingPassword(confirmingPassword: String) = changeUiState(confirmingPassword = confirmingPassword.removeWhitespace(), errorText = "")
 
     fun changePasswordVisibility() = changeUiState(passwordShown = !uiState.passwordShown)
 
     fun changeConfirmingPasswordVisibility() = changeUiState(confirmingPasswordShown = !uiState.confirmingPasswordShown)
 
-    fun registrationSuccessEventConsumed() = changeUiState(registrationSuccessEvent = false)
+    fun registrationSuccessEventConsumed() = changeUiState(registrationSuccessEvent = false, errorText = "")
 
     fun onImportClick()
     {
@@ -98,9 +99,17 @@ class RegisterScreenModel(
             || uiState.lastName.isBlank()
             || uiState.password.isBlank()
             || uiState.confirmingPassword.isBlank()
-            || uiState.password != uiState.confirmingPassword
         )
+        {
+            changeUiState(errorText = "All fields must be filled")
             return
+        }
+
+        if (uiState.password != uiState.confirmingPassword)
+        {
+            changeUiState(errorText = "Passwords do not match")
+            return
+        }
 
         val userDto = UserDto(
             username = uiState.username,
@@ -116,13 +125,19 @@ class RegisterScreenModel(
                 opiNet.currentUser = userDto.copy(id = newUserId)
                 changeUiState(registrationSuccessEvent = true)
             }
+            catch (e: UnresolvedAddressException)
+            {
+                changeUiState(errorText = "There was an error connecting to the database, check your internet connection")
+            }
             catch (e: UsernameAlreadyExistsException)
             {
+                changeUiState(errorText = "Username ${uiState.username} already exists")
                 logger.error { e.message }
             }
             catch (e: Exception)
             {
-                logger.error { e.message }
+                changeUiState(errorText = "There was an unknown error")
+                e.printStackTrace()
             }
         }
     }
@@ -135,6 +150,7 @@ class RegisterScreenModel(
         confirmingPassword: String? = null,
         passwordShown: Boolean? = null,
         confirmingPasswordShown: Boolean? = null,
+        errorText: String? = null,
         registrationSuccessEvent: Boolean? = null,
         filePickerOpen: Boolean? = null
     )
@@ -147,6 +163,7 @@ class RegisterScreenModel(
             confirmingPassword = confirmingPassword ?: uiState.confirmingPassword,
             passwordShown = passwordShown ?: uiState.passwordShown,
             confirmingPasswordShown = confirmingPasswordShown ?: uiState.confirmingPasswordShown,
+            errorText = errorText ?: uiState.errorText,
             registrationSuccessEvent = registrationSuccessEvent ?: uiState.registrationSuccessEvent,
             filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
         )

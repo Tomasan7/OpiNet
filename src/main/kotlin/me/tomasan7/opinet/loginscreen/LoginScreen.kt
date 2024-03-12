@@ -76,6 +76,10 @@ object LoginScreen : Screen
                     onDone = { model.login() }
                 )
             )
+            Text(
+                text = uiState.errorText,
+                color = MaterialTheme.colorScheme.error
+            )
             Button({ model.login() }) {
                 Text("Login")
             }
