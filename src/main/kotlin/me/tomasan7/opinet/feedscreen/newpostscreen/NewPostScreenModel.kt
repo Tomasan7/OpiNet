@@ -180,17 +180,17 @@ class NewPostScreenModel(
     }
 
     private fun changeUiState(
-        title: String? = null,
-        content: String? = null,
-        goBackToFeedEvent: Boolean? = null,
-        filePickerOpen: Boolean? = null
+        title: String = uiState.title,
+        content: String = uiState.content,
+        goBackToFeedEvent: Boolean = uiState.goBackToFeedEvent,
+        filePickerOpen: Boolean = uiState.filePickerOpen
     )
     {
         uiState = uiState.copy(
-            title = title ?: uiState.title,
-            content = content ?: uiState.content,
-            goBackToFeedEvent = goBackToFeedEvent ?: uiState.goBackToFeedEvent,
-            filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
+            title = title,
+            content = content,
+            goBackToFeedEvent = goBackToFeedEvent,
+            filePickerOpen = filePickerOpen
         )
     }
 }

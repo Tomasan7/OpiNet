@@ -81,23 +81,23 @@ class LoginScreenModel(
     }
 
     private fun changeUiState(
-        username: String? = null,
-        firstName: String? = null,
-        lastName: String? = null,
-        password: String? = null,
-        passwordShown: Boolean? = null,
-        errorText: String? = null,
-        loginSuccessEvent: Boolean? = null
+        username: String = uiState.username,
+        firstName: String = uiState.firstName,
+        lastName: String = uiState.lastName,
+        password: String = uiState.password,
+        passwordShown: Boolean = uiState.passwordShown,
+        errorText: String = uiState.errorText,
+        loginSuccessEvent: Boolean = uiState.loginSuccessEvent
     )
     {
         uiState = uiState.copy(
-            username = username ?: uiState.username,
-            firstName = firstName ?: uiState.firstName,
-            lastName = lastName ?: uiState.lastName,
-            password = password ?: uiState.password,
-            passwordShown = passwordShown ?: uiState.passwordShown,
-            errorText = errorText ?: uiState.errorText,
-            loginSuccessEvent = loginSuccessEvent ?: uiState.loginSuccessEvent
+            username = username,
+            firstName = firstName,
+            lastName = lastName,
+            password = password,
+            passwordShown = passwordShown,
+            errorText = errorText,
+            loginSuccessEvent = loginSuccessEvent
         )
     }
 

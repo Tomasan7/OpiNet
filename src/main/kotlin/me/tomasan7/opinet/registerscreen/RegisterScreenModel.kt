@@ -143,29 +143,29 @@ class RegisterScreenModel(
     }
 
     private fun changeUiState(
-        username: String? = null,
-        firstName: String? = null,
-        lastName: String? = null,
-        password: String? = null,
-        confirmingPassword: String? = null,
-        passwordShown: Boolean? = null,
-        confirmingPasswordShown: Boolean? = null,
-        errorText: String? = null,
-        registrationSuccessEvent: Boolean? = null,
-        filePickerOpen: Boolean? = null
+        username: String = uiState.username,
+        firstName: String = uiState.firstName,
+        lastName: String = uiState.lastName,
+        password: String = uiState.password,
+        confirmingPassword: String = uiState.confirmingPassword,
+        passwordShown: Boolean = uiState.passwordShown,
+        confirmingPasswordShown: Boolean = uiState.confirmingPasswordShown,
+        errorText: String = uiState.errorText,
+        registrationSuccessEvent: Boolean = uiState.registrationSuccessEvent,
+        filePickerOpen: Boolean = uiState.filePickerOpen
     )
     {
         uiState = uiState.copy(
-            username = username ?: uiState.username,
-            firstName = firstName ?: uiState.firstName,
-            lastName = lastName ?: uiState.lastName,
-            password = password ?: uiState.password,
-            confirmingPassword = confirmingPassword ?: uiState.confirmingPassword,
-            passwordShown = passwordShown ?: uiState.passwordShown,
-            confirmingPasswordShown = confirmingPasswordShown ?: uiState.confirmingPasswordShown,
-            errorText = errorText ?: uiState.errorText,
-            registrationSuccessEvent = registrationSuccessEvent ?: uiState.registrationSuccessEvent,
-            filePickerOpen = filePickerOpen ?: uiState.filePickerOpen
+            username = username,
+            firstName = firstName,
+            lastName = lastName,
+            password = password,
+            confirmingPassword = confirmingPassword,
+            passwordShown = passwordShown,
+            confirmingPasswordShown = confirmingPasswordShown,
+            errorText = errorText,
+            registrationSuccessEvent = registrationSuccessEvent,
+            filePickerOpen = filePickerOpen
         )
     }
 

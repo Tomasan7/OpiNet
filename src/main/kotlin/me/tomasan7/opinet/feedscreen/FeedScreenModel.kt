@@ -202,13 +202,13 @@ class FeedScreenModel(
     }
 
     private fun changeUiState(
-        posts: ImmutableList<Post>? = null,
-        commentsDialogState: FeedScreenState.CommentsDialogState? = null
+        posts: ImmutableList<Post> = uiState.posts,
+        commentsDialogState: FeedScreenState.CommentsDialogState = uiState.commentsDialogState
     )
     {
         uiState = uiState.copy(
-            posts = posts ?: uiState.posts,
-            commentsDialogState = commentsDialogState ?: uiState.commentsDialogState
+            posts = posts,
+            commentsDialogState = commentsDialogState
         )
     }
 }
